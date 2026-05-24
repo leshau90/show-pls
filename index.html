@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLS-SEM Report</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       background: #f1f5f9; color: #1e293b; padding: 20px; }
+h1 { font-size: 1.6rem; color: #1e40af; margin-bottom: 4px; }
+.sub { color: #64748b; font-size: 0.85rem; margin-bottom: 22px; }
+.card { background: white; border-radius: 10px; padding: 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.07); margin-bottom: 16px; }
+.card h2 { font-size: 1rem; color: #374151; margin-bottom: 14px;
+           border-bottom: 2px solid #e0f2fe; padding-bottom: 6px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.81rem; }
+.tbl th { background: #f0f9ff; color: #1e40af; text-align: left;
+          padding: 7px 10px; font-weight: 600; }
+.tbl td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; }
+.tbl tr:hover td { background: #fafafa; }
+.stat-box { display:flex; flex-direction:column; align-items:center;
+            padding: 12px 18px; border: 1px solid #e2e8f0; border-radius: 8px;
+            flex: 1; }
+.stat-val { font-size: 1.4rem; font-weight: 700; color: #1e40af; }
+.stat-label { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; text-align:center; }
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.sig { color: #059669; font-weight: 600; }
+.ns  { color: #ef4444; }
+details summary { cursor: pointer; list-style: none; }
+details summary h2 { display: inline; }
+details summary::after { content: ' ▾'; font-size:.8rem; color:#94a3b8; }
+details[open] summary::after { content: ' ▴'; }
+.ov { overflow-x: auto; }
+.legend { font-size:.72rem; color:#94a3b8; margin-top:8px; }
+
+/* ── diagram resizable container ── */
+#diagram-wrap {
+  resize: both;
+  overflow: hidden;
+  width: 100%;
+  height: calc(100vh - 180px);
+  min-width: 300px;
+  min-height: 200px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  position: relative;
+  box-sizing: border-box;
+}
+#diagram-wrap.fit-vp { width: calc(100vw - 80px); }
+.diag-toolbar { display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap; }
+
+/* ── table toolbar buttons ── */
+.tbl-toolbar { display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap; }
+.btn-tool {
+  font-size: .72rem; padding: 3px 9px;
+  border: 1px solid #e2e8f0; border-radius: 4px;
+  background: white; cursor: pointer; color: #374151;
+  transition: background .15s, border-color .15s, color .15s;
+  user-select: none;
+}
+.btn-tool:hover { background:#eff6ff; border-color:#3b82f6; color:#1d4ed8; }
+.btn-tool.dl:hover { background:#f0fdf4; border-color:#059669; color:#047857; }
+.btn-tool.active { background:#dbeafe; border-color:#3b82f6; color:#1d4ed8; font-weight:600; }
+.btn-tool.ok { background:#f0fdf4; border-color:#059669; color:#047857; }
+</style>
+</head>
+<body>
+
+<h1>PLS-SEM Analysis Report</h1>
+<p class="sub">
+  Bootstrap iterations: 5000 &nbsp;|&nbsp;
+  N = 227 observations &nbsp;|&nbsp;
+  Latent variables: X1, X2, Z1, Z2, Y
+</p>
+
+<div class="card">
+  <h2>Structural Model Diagram</h2>
+  <div class="diag-toolbar">
+    <button class="btn-tool" id="btn-fit-vp" onclick="toggleFitViewport()">↔ Fit Viewport Width</button>
+    <button class="btn-tool" onclick="resetDiagramSize()">⤢ Reset Size</button>
+    <span style="font-size:.72rem;color:#94a3b8">Drag the ↘ corner to resize in any direction</span>
+  </div>
+  <div id="diagram-wrap"><div style="position:relative;user-select:none;width:100%;height:100%">
+<svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1120 580" width="100%" height="100%"
+     style="background:#f8fafc;border-radius:8px;display:block;cursor:default">
+  <defs>
+    <marker id="d-arr"       markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#555"/></marker>
+    <marker id="d-arr-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#059669"/></marker>
+    <marker id="d-arr-red"   markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#ef4444"/></marker>
+    <marker id="d-arr-blue"  markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#3b82f6"/></marker>
+  </defs>
+  <g id="diagram-content"></g>
+</svg>
+<div id="d-info" style="display:none;position:absolute;right:4px;top:4px;width:210px;
+     background:white;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;
+     font-size:0.77rem;z-index:20;box-shadow:0 2px 10px rgba(0,0,0,.12);">
+  <button onclick="document.getElementById('d-info').style.display='none'"
+    style="float:right;border:none;background:none;cursor:pointer;color:#94a3b8;font-size:1.1rem;line-height:1">×</button>
+  <div id="d-info-body"></div>
+</div>
+</div></div>
+<script>
+(function(){
+  const D = {
+  "lv": {
+    "X1": {
+      "x": 220,
+      "y": 233,
+      "r": 40,
+      "label": "X1",
+      "fullLabel": "Kepemimpinan",
+      "r2": 0.0,
+      "cr": 0.9801,
+      "ave": 0.9425
+    },
+    "X2": {
+      "x": 220,
+      "y": 366,
+      "r": 40,
+      "label": "X2",
+      "fullLabel": "Budaya Organisasi",
+      "r2": 0.0,
+      "cr": 0.9801,
+      "ave": 0.9248
+    },
+    "Z1": {
+      "x": 560,
+      "y": 233,
+      "r": 40,
+      "label": "Z1",
+      "fullLabel": "Motivasi Kerja",
+      "r2": 0.9136,
+      "cr": 0.9885,
+      "ave": 0.9556
+    },
+    "Z2": {
+      "x": 560,
+      "y": 366,
+      "r": 40,
+      "label": "Z2",
+      "fullLabel": "Komitmen Organisasi",
+      "r2": 0.759,
+      "cr": 0.933,
+      "ave": 0.8226
+    },
+    "Y": {
+      "x": 900,
+      "y": 300,
+      "r": 40,
+      "label": "Y",
+      "fullLabel": "Kinerja Personil",
+      "r2": 0.8771,
+      "cr": 0.9755,
+      "ave": 0.8884
+    }
+  },
+  "ind": {
+    "X11": {
+      "x": 80,
+      "y": 179,
+      "w": 60,
+      "h": 28,
+      "label": "X11",
+      "fullLabel": "Kesadaran Diri",
+      "lv": "X1",
+      "loading": 0.9812,
+      "weight": 0.8469,
+      "communality": 0.9628,
+      "redundancy": 0.0
+    },
+    "X12": {
+      "x": 80,
+      "y": 219,
+      "w": 60,
+      "h": 28,
+      "label": "X12",
+      "fullLabel": "Kesadaran Sosial",
+      "lv": "X1",
+      "loading": 0.9725,
+      "weight": 0.8996,
+      "communality": 0.9458,
+      "redundancy": 0.0
+    },
+    "X13": {
+      "x": 80,
+      "y": 259,
+      "w": 60,
+      "h": 28,
+      "label": "X13",
+      "fullLabel": "Pengelolaan Diri",
+      "lv": "X1",
+      "loading": 0.9586,
+      "weight": 0.789,
+      "communality": 0.919,
+      "redundancy": 0.0
+    },
+    "X21": {
+      "x": 80,
+      "y": 292,
+      "w": 60,
+      "h": 28,
+      "label": "X21",
+      "fullLabel": "Budaya Kelompok",
+      "lv": "X2",
+      "loading": 0.9704,
+      "weight": 0.6287,
+      "communality": 0.9418,
+      "redundancy": 0.0
+    },
+    "X22": {
+      "x": 80,
+      "y": 332,
+      "w": 60,
+      "h": 28,
+      "label": "X22",
+      "fullLabel": "Budaya Adhokrasi",
+      "lv": "X2",
+      "loading": 0.9721,
+      "weight": 0.6622,
+      "communality": 0.9449,
+      "redundancy": 0.0
+    },
+    "X23": {
+      "x": 80,
+      "y": 372,
+      "w": 60,
+      "h": 28,
+      "label": "X23",
+      "fullLabel": "Budaya Rasional",
+      "lv": "X2",
+      "loading": 0.9363,
+      "weight": 0.6742,
+      "communality": 0.8767,
+      "redundancy": 0.0
+    },
+    "X24": {
+      "x": 80,
+      "y": 412,
+      "w": 60,
+      "h": 28,
+      "label": "X24",
+      "fullLabel": "Budaya Hirarki",
+      "lv": "X2",
+      "loading": 0.9674,
+      "weight": 0.6563,
+      "communality": 0.9358,
+      "redundancy": 0.0
+    },
+    "Z11": {
+      "x": 422,
+      "y": 145,
+      "w": 60,
+      "h": 28,
+      "label": "Z11",
+      "fullLabel": "Pencapaian",
+      "lv": "Z1",
+      "loading": 0.9802,
+      "weight": 0.6683,
+      "communality": 0.9608,
+      "redundancy": 0.8777
+    },
+    "Z12": {
+      "x": 494,
+      "y": 145,
+      "w": 60,
+      "h": 28,
+      "label": "Z12",
+      "fullLabel": "Pengakuan",
+      "lv": "Z1",
+      "loading": 0.9622,
+      "weight": 0.6507,
+      "communality": 0.9258,
+      "redundancy": 0.8458
+    },
+    "Z13": {
+      "x": 566,
+      "y": 145,
+      "w": 60,
+      "h": 28,
+      "label": "Z13",
+      "fullLabel": "Tanggung Jawab",
+      "lv": "Z1",
+      "loading": 0.983,
+      "weight": 0.6392,
+      "communality": 0.9664,
+      "redundancy": 0.8829
+    },
+    "Z14": {
+      "x": 638,
+      "y": 145,
+      "w": 60,
+      "h": 28,
+      "label": "Z14",
+      "fullLabel": "Pengembangan",
+      "lv": "Z1",
+      "loading": 0.9846,
+      "weight": 0.646,
+      "communality": 0.9694,
+      "redundancy": 0.8856
+    },
+    "Z21": {
+      "x": 458,
+      "y": 428,
+      "w": 60,
+      "h": 28,
+      "label": "Z21",
+      "fullLabel": "Komitmen Afektif",
+      "lv": "Z2",
+      "loading": 0.9047,
+      "weight": 0.8504,
+      "communality": 0.8185,
+      "redundancy": 0.6212
+    },
+    "Z22": {
+      "x": 530,
+      "y": 428,
+      "w": 60,
+      "h": 28,
+      "label": "Z22",
+      "fullLabel": "Komitmen Berkelanjutan",
+      "lv": "Z2",
+      "loading": 0.908,
+      "weight": 0.853,
+      "communality": 0.8245,
+      "redundancy": 0.6258
+    },
+    "Z23": {
+      "x": 602,
+      "y": 428,
+      "w": 60,
+      "h": 28,
+      "label": "Z23",
+      "fullLabel": "Komitmen Normatif",
+      "lv": "Z2",
+      "loading": 0.9083,
+      "weight": 0.9343,
+      "communality": 0.8249,
+      "redundancy": 0.6262
+    },
+    "Y1": {
+      "x": 990,
+      "y": 206,
+      "w": 60,
+      "h": 28,
+      "label": "Y1",
+      "fullLabel": "Perilaku Kerja",
+      "lv": "Y",
+      "loading": 0.9548,
+      "weight": 0.4888,
+      "communality": 0.9117,
+      "redundancy": 0.7997
+    },
+    "Y2": {
+      "x": 990,
+      "y": 246,
+      "w": 60,
+      "h": 28,
+      "label": "Y2",
+      "fullLabel": "Penghargaan",
+      "lv": "Y",
+      "loading": 0.962,
+      "weight": 0.5044,
+      "communality": 0.9254,
+      "redundancy": 0.8117
+    },
+    "Y3": {
+      "x": 990,
+      "y": 286,
+      "w": 60,
+      "h": 28,
+      "label": "Y3",
+      "fullLabel": "Hukuman",
+      "lv": "Y",
+      "loading": 0.9211,
+      "weight": 0.4567,
+      "communality": 0.8485,
+      "redundancy": 0.7442
+    },
+    "Y4": {
+      "x": 990,
+      "y": 326,
+      "w": 60,
+      "h": 28,
+      "label": "Y4",
+      "fullLabel": "Kontrak Kerja",
+      "lv": "Y",
+      "loading": 0.9039,
+      "weight": 0.4951,
+      "communality": 0.817,
+      "redundancy": 0.7166
+    },
+    "Y5": {
+      "x": 990,
+      "y": 366,
+      "w": 60,
+      "h": 28,
+      "label": "Y5",
+      "fullLabel": "Tugas Tambahan",
+      "lv": "Y",
+      "loading": 0.9691,
+      "weight": 0.5028,
+      "communality": 0.9393,
+      "redundancy": 0.8238
+    }
+  },
+  "direct": [
+    {
+      "from": "X1",
+      "to": "Y",
+      "hyp": "H1",
+      "coef": -0.0964,
+      "p": 0.8904,
+      "t": 0.1378,
+      "ci_lo": -0.2844,
+      "ci_hi": 0.4598,
+      "sig": "ns"
+    },
+    {
+      "from": "X1",
+      "to": "Z1",
+      "hyp": "H2",
+      "coef": 0.1098,
+      "p": 0.5363,
+      "t": 0.6184,
+      "ci_lo": -0.2336,
+      "ci_hi": 0.4701,
+      "sig": "ns"
+    },
+    {
+      "from": "X1",
+      "to": "Z2",
+      "hyp": "H3",
+      "coef": 0.2693,
+      "p": 0.154,
+      "t": 1.4257,
+      "ci_lo": -0.0624,
+      "ci_hi": 0.6907,
+      "sig": "ns"
+    },
+    {
+      "from": "X2",
+      "to": "Y",
+      "hyp": "H4",
+      "coef": 0.3954,
+      "p": 0.0,
+      "t": 4.872,
+      "ci_lo": 0.4654,
+      "ci_hi": 1.183,
+      "sig": "***"
+    },
+    {
+      "from": "X2",
+      "to": "Z2",
+      "hyp": "H5",
+      "coef": 0.6108,
+      "p": 0.001,
+      "t": 3.2918,
+      "ci_lo": 0.1865,
+      "ci_hi": 0.9348,
+      "sig": "**"
+    },
+    {
+      "from": "X2",
+      "to": "Z1",
+      "hyp": "H6",
+      "coef": 0.8506,
+      "p": 0.0,
+      "t": 5.059,
+      "ci_lo": 0.5057,
+      "ci_hi": 1.1656,
+      "sig": "***"
+    },
+    {
+      "from": "Z1",
+      "to": "Y",
+      "hyp": "H7",
+      "coef": 0.3559,
+      "p": 0.0805,
+      "t": 1.7482,
+      "ci_lo": -0.0164,
+      "ci_hi": 0.7671,
+      "sig": "ns"
+    },
+    {
+      "from": "Z2",
+      "to": "Y",
+      "hyp": "H8",
+      "coef": 0.3093,
+      "p": 0.0034,
+      "t": 2.928,
+      "ci_lo": 0.12,
+      "ci_hi": 0.536,
+      "sig": "**"
+    }
+  ],
+  "indirect": [
+    {
+      "path": [
+        "X1",
+        "Z1",
+        "Y"
+      ],
+      "hyp": "H9",
+      "est": 0.0391,
+      "p": 0.5599,
+      "t": 0.583,
+      "sig": "ns",
+      "medAbove": true
+    },
+    {
+      "path": [
+        "X1",
+        "Z2",
+        "Y"
+      ],
+      "hyp": "H10",
+      "est": 0.0833,
+      "p": 0.2,
+      "t": 1.2818,
+      "sig": "ns",
+      "medAbove": false
+    },
+    {
+      "path": [
+        "X2",
+        "Z2",
+        "Y"
+      ],
+      "hyp": "H11",
+      "est": 0.1889,
+      "p": 0.0287,
+      "t": 2.1878,
+      "sig": "*",
+      "medAbove": false
+    },
+    {
+      "path": [
+        "X2",
+        "Z1",
+        "Y"
+      ],
+      "hyp": "H12",
+      "est": 0.3027,
+      "p": 0.0985,
+      "t": 1.6523,
+      "sig": "ns",
+      "medAbove": true
+    }
+  ]
+};
+  const svg  = document.getElementById('diagram-svg');
+  const grp  = document.getElementById('diagram-content');
+  const info = document.getElementById('d-info');
+  const body = document.getElementById('d-info-body');
+
+  /* Mutable node positions */
+  const pos = {};
+  Object.entries(D.lv).forEach(([k,v])  => { pos[k] = {x:v.x, y:v.y}; });
+  Object.entries(D.ind).forEach(([k,v]) => { pos[k] = {x:v.x, y:v.y}; });
+
+  let drag = null; /* {id, ox, oy, moved} */
+  let selected = null;
+
+  /* ── group / tether state (default: all LVs locked to their indicators) ── */
+  const locked = {};
+  Object.keys(D.lv).forEach(k => { locked[k] = true; });
+  let groupOffsets = {};   /* indId → {dx,dy} relative to dragged LV */
+
+  /* ── edge hover tooltip registry (rebuilt each render) ── */
+  let edgeData = [];
+
+  /* ── geometry ─────────────────────────────────────────────────────────── */
+  function circleEdge(cx, cy, r, tx, ty) {
+    const dx=tx-cx, dy=ty-cy, l=Math.hypot(dx,dy)||1;
+    return {x:cx+dx/l*r, y:cy+dy/l*r};
+  }
+  function circleRecv(cx, cy, r, fx, fy, extra) {
+    const dx=cx-fx, dy=cy-fy, l=Math.hypot(dx,dy)||1;
+    return {x:cx-dx/l*(r+extra), y:cy-dy/l*(r+extra)};
+  }
+  function rectCenter(id) {
+    const p=pos[id], d=D.ind[id]; return {x:p.x+d.w/2, y:p.y+d.h/2};
+  }
+  function rectEdge(id, tx, ty) {
+    const p=pos[id], d=D.ind[id];
+    const cx=p.x+d.w/2, cy=p.y+d.h/2;
+    const dx=tx-cx, dy=ty-cy, hw=d.w/2, hh=d.h/2;
+    if (Math.abs(dx)*hh > Math.abs(dy)*hw) {
+      const s=hw/Math.abs(dx); return {x:cx+dx*s, y:cy+dy*s};
+    } else {
+      const s=hh/Math.abs(dy); return {x:cx+dx*s, y:cy+dy*s};
+    }
+  }
+
+  /* ── helpers ──────────────────────────────────────────────────────────── */
+  const fmtN = v => (v===null||v===undefined) ? '—' : v.toFixed(4);
+  const fmtP = v => (v===null) ? '—' : (v<0.001 ? '<0.001' : v.toFixed(3));
+  const sigCol  = p => (p===null||p>=0.05) ? '#dc2626' : '#059669';
+  const markSig = p => (p===null||p>=0.05) ? 'url(#d-arr-red)' : 'url(#d-arr-green)';
+
+  /* Convert H1 → H₁, H2a → H₂ₐ using Unicode subscripts */
+  const _sub = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉','a':'ₐ','b':'ᵦ'};
+  function fmtHyp(h) { return h.replace(/[0-9ab]/g, c => _sub[c]||c); }
+
+  function txt(x,y,s,sz,fill,anchor,bold,italic) {
+    const fw = bold   ? 'font-weight="bold"'   : '';
+    const fi = italic ? 'font-style="italic"'  : '';
+    return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor||'middle'}"
+      font-size="${sz}" fill="${fill}" ${fw} ${fi}
+      font-family="system-ui,sans-serif" style="pointer-events:none">${s}</text>`;
+  }
+
+  /* ── render ───────────────────────────────────────────────────────────── */
+  function render() {
+    let out = [];
+    edgeData = [];   /* reset edge tooltip registry */
+
+    /* 1 — indirect curved arrows (hit-area then visible path) */
+    D.indirect.forEach(edge => {
+      const f=edge.path[0], t=edge.path[edge.path.length-1];
+      const fp=pos[f], tp=pos[t], fr=D.lv[f].r, tr=D.lv[t].r;
+      const s=circleEdge(fp.x,fp.y,fr,tp.x,tp.y);
+      const e2=circleRecv(tp.x,tp.y,tr,fp.x,fp.y,12);
+      const cx=(s.x+e2.x)/2;
+      const cy = edge.medAbove ? Math.min(s.y,e2.y)-70 : Math.max(s.y,e2.y)+70;
+      const col = (edge.p!==null&&edge.p<0.05) ? '#2563eb' : '#7c3aed';
+      const pLbl = edge.p!==null ? (edge.p<0.001?'p<0.001':'p='+edge.p.toFixed(3)) : '—';
+      const hypPart = edge.hyp ? fmtHyp(edge.hyp)+' ' : '';
+      const lbl = hypPart+edge.est.toFixed(3)+' '+edge.sig+' '+pLbl;
+      const eid = edgeData.length;
+      edgeData.push({type:'indirect', edge});
+      /* transparent wide hit area */
+      out.push(`<path d="M${s.x.toFixed(1)},${s.y.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${e2.x.toFixed(1)},${e2.y.toFixed(1)}"
+        fill="none" stroke="transparent" stroke-width="14" data-eid="${eid}" class="ehit" style="cursor:crosshair"/>`);
+      /* visible path (pointer-events off — hit area handles hover) */
+      out.push(`<path d="M${s.x.toFixed(1)},${s.y.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${e2.x.toFixed(1)},${e2.y.toFixed(1)}"
+        fill="none" stroke="${col}" stroke-width="1.8" stroke-dasharray="7,3" marker-end="url(#d-arr-blue)" style="pointer-events:none"/>`);
+      out.push(txt(cx,cy-9,lbl,10,col,'middle'));
+    });
+
+    /* 2 — direct path arrows (LV→LV) */
+    D.direct.forEach(edge => {
+      const fp=pos[edge.from], tp=pos[edge.to];
+      const fr=D.lv[edge.from].r, tr=D.lv[edge.to].r;
+      const s=circleEdge(fp.x,fp.y,fr,tp.x,tp.y);
+      const e2=circleRecv(tp.x,tp.y,tr,fp.x,fp.y,12);
+      const mx=(s.x+e2.x)/2, my=(s.y+e2.y)/2;
+      const col = sigCol(edge.p);
+      const eid = edgeData.length;
+      edgeData.push({type:'direct', edge});
+      /* transparent hit area */
+      out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
+        stroke="transparent" stroke-width="14" data-eid="${eid}" class="ehit" style="cursor:crosshair"/>`);
+      /* visible line */
+      out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
+        stroke="${col}" stroke-width="2.5" marker-end="${markSig(edge.p)}" style="pointer-events:none"/>`);
+      if (edge.hyp) {
+        const ns = (edge.p===null||edge.p>=0.05);
+        out.push(txt(mx,my-17,fmtHyp(edge.hyp),13,col,'middle',true,ns));
+      }
+      out.push(txt(mx,my-4,edge.coef.toFixed(3)+' '+edge.sig,10,col,'middle'));
+      const pStr = edge.p===null ? 'p=—' : (edge.p<0.001?'p<0.001':'p='+edge.p.toFixed(3));
+      out.push(txt(mx,my+9,pStr,9,col,'middle',false,false));
+    });
+
+    /* 3 — indicator arrows (LV circle → indicator rect) */
+    Object.entries(D.ind).forEach(([id,d]) => {
+      const lvp=pos[d.lv], rc=rectCenter(id);
+      const s=circleEdge(lvp.x,lvp.y,D.lv[d.lv].r,rc.x,rc.y);
+      const e2=rectEdge(id,lvp.x,lvp.y);
+      const mx=(s.x+e2.x)/2, my=(s.y+e2.y)/2;
+      const eid = edgeData.length;
+      edgeData.push({type:'indicator', indId:id, ind:d});
+      /* transparent hit area */
+      out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
+        stroke="transparent" stroke-width="12" data-eid="${eid}" class="ehit" style="cursor:crosshair"/>`);
+      /* visible line */
+      out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
+        stroke="#94a3b8" stroke-width="1.5" marker-end="url(#d-arr)" style="pointer-events:none"/>`);
+      out.push(txt(mx,my-4,d.loading.toFixed(2),9,'#64748b','middle'));
+    });
+
+    /* 4 — indicator rectangles (draggable) */
+    Object.entries(D.ind).forEach(([id,d]) => {
+      const p=pos[id], isSel=(selected===id);
+      const sc=isSel?'#1d4ed8':'#94a3b8', sw=isSel?2:1.5;
+      out.push(`<rect x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" width="${d.w}" height="${d.h}"
+        rx="4" fill="${isSel?'#eff6ff':'white'}" stroke="${sc}" stroke-width="${sw}"
+        data-nid="${id}" class="nd" style="cursor:grab"/>`);
+      out.push(`<text x="${(p.x+d.w/2).toFixed(1)}" y="${(p.y+d.h/2+4.5).toFixed(1)}"
+        text-anchor="middle" font-size="11" fill="#374151" font-family="system-ui,sans-serif"
+        data-nid="${id}" class="nd" style="cursor:grab;pointer-events:all">${id}</text>`);
+    });
+
+    /* 5 — LV circles with label + lock-toggle badge (draggable, on top) */
+    Object.entries(D.lv).forEach(([id,d]) => {
+      const p=pos[id], isSel=(selected===id);
+      const sc=isSel?'#1d4ed8':'#3b82f6', sw=isSel?3.5:2.5;
+      const lk=locked[id];
+      out.push(`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${d.r}"
+        fill="#eff6ff" stroke="${sc}" stroke-width="${sw}"
+        data-nid="${id}" class="nd" style="cursor:grab"/>`);
+      /* label shifted up to leave room for lock badge */
+      out.push(`<text x="${p.x.toFixed(1)}" y="${(p.y-2).toFixed(1)}"
+        text-anchor="middle" font-size="13" fill="#1e40af" font-weight="bold"
+        font-family="system-ui,sans-serif" data-nid="${id}" class="nd"
+        style="cursor:grab;pointer-events:all">${id}</text>`);
+      /* lock-toggle badge — small pill at bottom of circle */
+      out.push(`<rect x="${(p.x-13).toFixed(1)}" y="${(p.y+11).toFixed(1)}" width="26" height="16" rx="5"
+        fill="${lk?'#dbeafe':'#f1f5f9'}" stroke="${lk?'#3b82f6':'#cbd5e1'}" stroke-width="1.2"
+        data-lock="${id}" class="lktog" style="cursor:pointer" title="${lk?'Click to free indicators':'Click to group indicators'}"/>`);
+      out.push(`<text x="${p.x.toFixed(1)}" y="${(p.y+22).toFixed(1)}"
+        text-anchor="middle" font-size="10" fill="${lk?'#1d4ed8':'#6b7280'}"
+        font-family="system-ui,sans-serif" data-lock="${id}" class="lktog"
+        style="cursor:pointer;pointer-events:all">${lk?'🔒':'🔓'}</text>`);
+    });
+
+    grp.innerHTML = out.join('\n');
+
+    /* re-attach drag listeners to draggable nodes */
+    grp.querySelectorAll('.nd').forEach(el => {
+      el.addEventListener('mousedown',  onDown);
+      el.addEventListener('touchstart', onTouch, {passive:false});
+    });
+
+    /* lock-toggle click */
+    grp.querySelectorAll('.lktog').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        const lid = el.dataset.lock;
+        locked[lid] = !locked[lid];
+        render();
+      });
+      /* prevent drag from starting on the badge */
+      el.addEventListener('mousedown', e => e.stopPropagation());
+    });
+
+    /* edge hover tooltip listeners */
+    grp.querySelectorAll('.ehit').forEach(el => {
+      el.addEventListener('mouseover', showLineTip);
+      el.addEventListener('mouseout',  hideLineTip);
+      el.addEventListener('mousemove', moveLineTip);
+    });
+  }
+
+  /* ── info panel ───────────────────────────────────────────────────────── */
+  /* ── info panel (click on node) ──────────────────────────────────────── */
+  function showInfo(id) {
+    selected = id;
+    let h = '';
+    if (D.lv[id]) {
+      const d=D.lv[id];
+      const lkTxt = locked[id] ? '🔒 Indicators grouped' : '🔓 Indicators free';
+      h = `<strong style="color:#1e40af">${id}</strong>&nbsp;
+           <span style="color:#64748b;font-size:0.72rem">${d.fullLabel}</span>
+           <hr style="margin:6px 0;border-color:#e2e8f0">
+           <table style="width:100%;border-collapse:collapse;font-size:0.77rem">
+           <tr><td>R²</td><td style="text-align:right;font-weight:600">${fmtN(d.r2)}</td></tr>
+           <tr><td>CR</td><td style="text-align:right;font-weight:600">${fmtN(d.cr)}</td></tr>
+           <tr><td>AVE</td><td style="text-align:right;font-weight:600">${fmtN(d.ave)}</td></tr>
+           </table>
+           <div style="margin-top:6px;color:#3b82f6;font-size:0.72rem">${lkTxt}</div>
+           <div style="margin-top:3px;color:#64748b;font-size:0.72rem">Click+drag to move · click 🔒 to toggle</div>`;
+    } else if (D.ind[id]) {
+      const d=D.ind[id];
+      h = `<strong style="color:#374151">${id}</strong>&nbsp;
+           <span style="color:#64748b;font-size:0.72rem">${d.fullLabel}</span>
+           <div style="color:#94a3b8;font-size:0.72rem">→ ${d.lv}</div>
+           <hr style="margin:6px 0;border-color:#e2e8f0">
+           <table style="width:100%;border-collapse:collapse;font-size:0.77rem">
+           <tr><td>Loading</td><td style="text-align:right;font-weight:600">${fmtN(d.loading)}</td></tr>
+           <tr><td>Weight</td><td style="text-align:right;font-weight:600">${fmtN(d.weight)}</td></tr>
+           <tr><td>Communality</td><td style="text-align:right;font-weight:600">${fmtN(d.communality)}</td></tr>
+           <tr><td>Redundancy</td><td style="text-align:right;font-weight:600">${fmtN(d.redundancy)}</td></tr>
+           </table>`;
+    }
+    body.innerHTML = h;
+    info.style.display = 'block';
+    render();
+  }
+
+  /* ── line hover tooltip ───────────────────────────────────────────────── */
+  const lineTip = document.getElementById('line-tip');
+
+  function showLineTip(e) {
+    const data = edgeData[+e.currentTarget.dataset.eid];
+    lineTip.innerHTML = buildTipHtml(data);
+    lineTip.style.display = 'block';
+    moveLineTip(e);
+  }
+  function hideLineTip() { lineTip.style.display = 'none'; }
+  function moveLineTip(e) {
+    const x = e.clientX + 16, y = e.clientY - 12;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const tw = lineTip.offsetWidth || 210, th = lineTip.offsetHeight || 160;
+    lineTip.style.left = (x + tw > vw - 6 ? e.clientX - tw - 12 : x) + 'px';
+    lineTip.style.top  = (y + th > vh - 6 ? e.clientY - th - 12 : y) + 'px';
+  }
+  function buildTipHtml(data) {
+    const row = (k,v) =>
+      `<tr><td style="color:#64748b;padding:2px 0;white-space:nowrap">${k}</td>
+       <td style="text-align:right;font-weight:600;padding:2px 0 2px 14px">${v}</td></tr>`;
+    let title='', sub='', rows='';
+    if (data.type === 'direct') {
+      const e=data.edge;
+      const sigCol2 = (e.p===null||e.p>=0.05) ? '#dc2626' : '#059669';
+      title = (e.hyp ? fmtHyp(e.hyp)+' &nbsp;' : '') + `${e.from} &rarr; ${e.to}`;
+      sub   = 'Direct structural path';
+      rows  = [
+        row('Coefficient', e.coef.toFixed(4)),
+        row('t-statistic', e.t.toFixed(4)),
+        row('p-value',     fmtP(e.p)),
+        row('Significance',`<span style="color:${sigCol2};font-weight:700">${e.sig}</span>`),
+        row('95% CI',      (!isNaN(e.ci_lo) ? `[${e.ci_lo.toFixed(4)}, ${e.ci_hi.toFixed(4)}]` : '—')),
+      ].join('');
+    } else if (data.type === 'indirect') {
+      const e=data.edge;
+      const sigCol2 = (e.p===null||e.p>=0.05) ? '#7c3aed' : '#2563eb';
+      title = (e.hyp ? fmtHyp(e.hyp)+' &nbsp;' : '') + e.path.join(' &rarr; ');
+      sub   = 'Indirect / mediation path';
+      rows  = [
+        row('Estimate',    e.est.toFixed(4)),
+        row('t-statistic', e.t.toFixed(4)),
+        row('p-value',     fmtP(e.p)),
+        row('Significance',`<span style="color:${sigCol2};font-weight:700">${e.sig}</span>`),
+      ].join('');
+    } else {
+      const d=data.ind, id=data.indId;
+      title = `${d.lv} &rarr; ${id}`;
+      sub   = d.fullLabel;
+      rows  = [
+        row('Loading',      d.loading.toFixed(4)),
+        row('Weight',       d.weight.toFixed(4)),
+        row('Communality',  d.communality.toFixed(4)),
+        row('Redundancy',   d.redundancy.toFixed(4)),
+      ].join('');
+    }
+    return `<div style="font-weight:700;font-size:0.82rem;color:#1e40af;margin-bottom:2px">${title}</div>
+      <div style="font-size:0.71rem;color:#64748b;margin-bottom:6px">${sub}</div>
+      <table style="width:100%;border-collapse:collapse;font-size:0.77rem">${rows}</table>`;
+  }
+
+  /* ── SVG coordinate helper (uses viewBox so scaling is always correct) ── */
+  function svgPt(e) {
+    const r  = svg.getBoundingClientRect();
+    const vb = svg.viewBox.baseVal;       // always 0 0 1120 580
+    const sx = vb.width  / r.width;
+    const sy = vb.height / r.height;
+    return {x:(e.clientX-r.left)*sx, y:(e.clientY-r.top)*sy};
+  }
+
+  /* ── mouse drag ───────────────────────────────────────────────────────── */
+  function onDown(e) {
+    e.preventDefault(); e.stopPropagation();
+    const id=e.currentTarget.dataset.nid; if(!id) return;
+    const p=svgPt(e);
+    drag={id, ox:p.x-pos[id].x, oy:p.y-pos[id].y, moved:false};
+    /* if dragging a locked LV, snapshot each indicator's offset from it */
+    groupOffsets = {};
+    if (D.lv[id] && locked[id]) {
+      Object.entries(D.ind).forEach(([indId, d]) => {
+        if (d.lv === id) {
+          groupOffsets[indId] = {dx: pos[indId].x - pos[id].x,
+                                 dy: pos[indId].y - pos[id].y};
+        }
+      });
+    }
+  }
+  window.addEventListener('mousemove', e => {
+    if (!drag) return;
+    drag.moved = true;
+    const p=svgPt(e);
+    const nx=p.x-drag.ox, ny=p.y-drag.oy;
+    pos[drag.id].x=nx; pos[drag.id].y=ny;
+    /* tether: move grouped indicators with the LV */
+    Object.entries(groupOffsets).forEach(([indId, off]) => {
+      pos[indId].x = nx + off.dx;
+      pos[indId].y = ny + off.dy;
+    });
+    render();
+  });
+  window.addEventListener('mouseup', () => {
+    if (drag && !drag.moved) showInfo(drag.id);
+    drag=null;
+    groupOffsets={};
+  });
+
+  /* ── touch drag ───────────────────────────────────────────────────────── */
+  function onTouch(e) {
+    if (e.touches.length!==1) return;
+    e.preventDefault();
+    const id=e.currentTarget.dataset.nid; if(!id) return;
+    const p=svgPt(e.touches[0]);
+    drag={id, ox:p.x-pos[id].x, oy:p.y-pos[id].y, moved:false};
+    groupOffsets = {};
+    if (D.lv[id] && locked[id]) {
+      Object.entries(D.ind).forEach(([indId, d]) => {
+        if (d.lv === id) {
+          groupOffsets[indId] = {dx: pos[indId].x - pos[id].x,
+                                 dy: pos[indId].y - pos[id].y};
+        }
+      });
+    }
+  }
+  svg.addEventListener('touchmove', e => {
+    if (!drag||e.touches.length!==1) return;
+    e.preventDefault(); drag.moved=true;
+    const p=svgPt(e.touches[0]);
+    const nx=p.x-drag.ox, ny=p.y-drag.oy;
+    pos[drag.id].x=nx; pos[drag.id].y=ny;
+    Object.entries(groupOffsets).forEach(([indId, off]) => {
+      pos[indId].x = nx + off.dx;
+      pos[indId].y = ny + off.dy;
+    });
+    render();
+  }, {passive:false});
+  svg.addEventListener('touchend', () => { drag=null; groupOffsets={}; });
+
+  render();
+})();
+</script>
+  <p class="legend">
+    Drag any node to rearrange &nbsp;|&nbsp; Click a node to inspect its statistics &nbsp;|&nbsp;
+    🔒 badge on LV toggles group drag &nbsp;|&nbsp;
+    Hover any arrow for value popup &nbsp;|&nbsp;
+    Solid arrows: direct paths (green = sig. p&lt;0.05, red = ns) &nbsp;|&nbsp;
+    Dashed blue: indirect/mediation paths &nbsp;|&nbsp; Numbers on outer arrows: loadings &nbsp;|&nbsp;
+    Use ↔ button or drag ↘ corner to resize
+  </p>
+</div>
+<!-- Line tooltip — position:fixed so it floats above everything -->
+<div id="line-tip" style="display:none;position:fixed;pointer-events:none;
+  background:white;border:1px solid #e2e8f0;border-radius:9px;
+  padding:10px 14px;font-size:0.77rem;z-index:9999;
+  box-shadow:0 4px 16px rgba(0,0,0,.14);min-width:170px;max-width:240px;
+  transition:opacity .08s"></div>
+
+<div class="grid3">
+  <div class="card">
+    <h2>Model Fit</h2>
+    <div class="stat-row">
+      <div class="stat-box">
+        <span class="stat-val">0.8787</span>
+        <span class="stat-label">Goodness of Fit</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">0.9974</span>
+        <span class="stat-label">Q² (Predictive Rel.)</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>R² Summary</h2>
+    <table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>type</th>
+      <th>r_squared</th>
+      <th>r_squared_adj</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X1</th>
+      <td>Exogenous</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X2</th>
+      <td>Exogenous</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>Y</th>
+      <td>Endogenous</td>
+      <td>0.8771</td>
+      <td>0.8749</td>
+    </tr>
+    <tr>
+      <th>Z1</th>
+      <td>Endogenous</td>
+      <td>0.9136</td>
+      <td>0.9128</td>
+    </tr>
+    <tr>
+      <th>Z2</th>
+      <td>Endogenous</td>
+      <td>0.7590</td>
+      <td>0.7569</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+  <div class="card">
+    <h2>Composite Reliability &amp; AVE</h2>
+    <table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CR</th>
+      <th>AVE</th>
+    </tr>
+    <tr>
+      <th>LV</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X1</th>
+      <td>0.9801</td>
+      <td>0.9425</td>
+    </tr>
+    <tr>
+      <th>X2</th>
+      <td>0.9801</td>
+      <td>0.9248</td>
+    </tr>
+    <tr>
+      <th>Y</th>
+      <td>0.9755</td>
+      <td>0.8884</td>
+    </tr>
+    <tr>
+      <th>Z1</th>
+      <td>0.9885</td>
+      <td>0.9556</td>
+    </tr>
+    <tr>
+      <th>Z2</th>
+      <td>0.9330</td>
+      <td>0.8226</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Hypothesis Testing (Direct &amp; Indirect Effects)</h2>
+  <div class="ov"><table class="tbl"><thead><tr><th>Hyp</th><th>Path</th><th>Type</th><th>Estimate</th><th>t-stat</th><th>p-value</th><th>Sig</th><th>95% CI</th></tr></thead><tbody><tr><td class="ns">H1</td><td class="ns">X1 -> Y</td><td>direct</td><td>-0.0964</td><td>0.1378</td><td>0.890</td><td class="ns">ns</td><td>[-0.2844, 0.4598]</td></tr><tr><td class="ns">H2</td><td class="ns">X1 -> Z1</td><td>direct</td><td>0.1098</td><td>0.6184</td><td>0.536</td><td class="ns">ns</td><td>[-0.2336, 0.4701]</td></tr><tr><td class="ns">H3</td><td class="ns">X1 -> Z2</td><td>direct</td><td>0.2693</td><td>1.4257</td><td>0.154</td><td class="ns">ns</td><td>[-0.0624, 0.6907]</td></tr><tr><td class="sig">H4</td><td class="sig">X2 -> Y</td><td>direct</td><td>0.3954</td><td>4.8720</td><td><0.001</td><td class="sig">***</td><td>[0.4654, 1.1830]</td></tr><tr><td class="sig">H5</td><td class="sig">X2 -> Z2</td><td>direct</td><td>0.6108</td><td>3.2918</td><td>0.001</td><td class="sig">**</td><td>[0.1865, 0.9348]</td></tr><tr><td class="sig">H6</td><td class="sig">X2 -> Z1</td><td>direct</td><td>0.8506</td><td>5.0590</td><td><0.001</td><td class="sig">***</td><td>[0.5057, 1.1656]</td></tr><tr><td class="ns">H7</td><td class="ns">Z1 -> Y</td><td>direct</td><td>0.3559</td><td>1.7482</td><td>0.080</td><td class="ns">ns</td><td>[-0.0164, 0.7671]</td></tr><tr><td class="sig">H8</td><td class="sig">Z2 -> Y</td><td>direct</td><td>0.3093</td><td>2.9280</td><td>0.003</td><td class="sig">**</td><td>[0.1200, 0.5360]</td></tr><tr><td class="ns">H9</td><td class="ns">X1 -> Z1 -> Y</td><td>indirect</td><td>0.0391</td><td>0.5830</td><td>0.560</td><td class="ns">ns</td><td>—</td></tr><tr><td class="ns">H10</td><td class="ns">X1 -> Z2 -> Y</td><td>indirect</td><td>0.0833</td><td>1.2818</td><td>0.200</td><td class="ns">ns</td><td>—</td></tr><tr><td class="sig">H11</td><td class="sig">X2 -> Z2 -> Y</td><td>indirect</td><td>0.1889</td><td>2.1878</td><td>0.029</td><td class="sig">*</td><td>—</td></tr><tr><td class="ns">H12</td><td class="ns">X2 -> Z1 -> Y</td><td>indirect</td><td>0.3027</td><td>1.6523</td><td>0.099</td><td class="ns">ns</td><td>—</td></tr></tbody></table></div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <h2>Outer Loadings (Averaged Indicators)</h2>
+    <div class="ov"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>weight</th>
+      <th>loading</th>
+      <th>communality</th>
+      <th>redundancy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AvX11</th>
+      <td>0.8469</td>
+      <td>0.9812</td>
+      <td>0.9628</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvX12</th>
+      <td>0.8996</td>
+      <td>0.9725</td>
+      <td>0.9458</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvX13</th>
+      <td>0.7890</td>
+      <td>0.9586</td>
+      <td>0.9190</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvX21</th>
+      <td>0.6287</td>
+      <td>0.9704</td>
+      <td>0.9418</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvX22</th>
+      <td>0.6622</td>
+      <td>0.9721</td>
+      <td>0.9449</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvX23</th>
+      <td>0.6742</td>
+      <td>0.9363</td>
+      <td>0.8767</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvX24</th>
+      <td>0.6563</td>
+      <td>0.9674</td>
+      <td>0.9358</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>AvY1</th>
+      <td>0.4888</td>
+      <td>0.9548</td>
+      <td>0.9117</td>
+      <td>0.7997</td>
+    </tr>
+    <tr>
+      <th>AvY2</th>
+      <td>0.5044</td>
+      <td>0.9620</td>
+      <td>0.9254</td>
+      <td>0.8117</td>
+    </tr>
+    <tr>
+      <th>AvY3</th>
+      <td>0.4567</td>
+      <td>0.9211</td>
+      <td>0.8485</td>
+      <td>0.7442</td>
+    </tr>
+    <tr>
+      <th>AvY4</th>
+      <td>0.4951</td>
+      <td>0.9039</td>
+      <td>0.8170</td>
+      <td>0.7166</td>
+    </tr>
+    <tr>
+      <th>AvY5</th>
+      <td>0.5028</td>
+      <td>0.9691</td>
+      <td>0.9393</td>
+      <td>0.8238</td>
+    </tr>
+    <tr>
+      <th>AvZ11</th>
+      <td>0.6683</td>
+      <td>0.9802</td>
+      <td>0.9608</td>
+      <td>0.8777</td>
+    </tr>
+    <tr>
+      <th>AvZ12</th>
+      <td>0.6507</td>
+      <td>0.9622</td>
+      <td>0.9258</td>
+      <td>0.8458</td>
+    </tr>
+    <tr>
+      <th>AvZ13</th>
+      <td>0.6392</td>
+      <td>0.9830</td>
+      <td>0.9664</td>
+      <td>0.8829</td>
+    </tr>
+    <tr>
+      <th>AvZ14</th>
+      <td>0.6460</td>
+      <td>0.9846</td>
+      <td>0.9694</td>
+      <td>0.8856</td>
+    </tr>
+    <tr>
+      <th>AvZ21</th>
+      <td>0.8504</td>
+      <td>0.9047</td>
+      <td>0.8185</td>
+      <td>0.6212</td>
+    </tr>
+    <tr>
+      <th>AvZ22</th>
+      <td>0.8530</td>
+      <td>0.9080</td>
+      <td>0.8245</td>
+      <td>0.6258</td>
+    </tr>
+    <tr>
+      <th>AvZ23</th>
+      <td>0.9343</td>
+      <td>0.9083</td>
+      <td>0.8249</td>
+      <td>0.6262</td>
+    </tr>
+  </tbody>
+</table></div>
+  </div>
+  <div class="card">
+    <h2>Unidimensionality</h2>
+    <table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mode</th>
+      <th>mvs</th>
+      <th>cronbach_alpha</th>
+      <th>dillon_goldstein_rho</th>
+      <th>eig_1st</th>
+      <th>eig_2nd</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X2</th>
+      <td>A</td>
+      <td>4.0</td>
+      <td>0.9729</td>
+      <td>0.9802</td>
+      <td>3.7006</td>
+      <td>0.1789</td>
+    </tr>
+    <tr>
+      <th>X1</th>
+      <td>A</td>
+      <td>3.0</td>
+      <td>0.9698</td>
+      <td>0.9803</td>
+      <td>2.8291</td>
+      <td>0.1149</td>
+    </tr>
+    <tr>
+      <th>Z2</th>
+      <td>A</td>
+      <td>3.0</td>
+      <td>0.8928</td>
+      <td>0.9333</td>
+      <td>2.4707</td>
+      <td>0.3004</td>
+    </tr>
+    <tr>
+      <th>Z1</th>
+      <td>A</td>
+      <td>4.0</td>
+      <td>0.9845</td>
+      <td>0.9885</td>
+      <td>3.8225</td>
+      <td>0.1076</td>
+    </tr>
+    <tr>
+      <th>Y</th>
+      <td>A</td>
+      <td>5.0</td>
+      <td>0.9685</td>
+      <td>0.9756</td>
+      <td>4.4446</td>
+      <td>0.2984</td>
+    </tr>
+  </tbody>
+</table>
+    <h2 style="margin-top:16px">Full Effects (Direct / Indirect / Total)</h2>
+    <table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>from</th>
+      <th>to</th>
+      <th>direct</th>
+      <th>indirect</th>
+      <th>total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X2 -&gt; Z2</th>
+      <td>X2</td>
+      <td>Z2</td>
+      <td>0.6108</td>
+      <td>0.0000</td>
+      <td>0.6108</td>
+    </tr>
+    <tr>
+      <th>X2 -&gt; Z1</th>
+      <td>X2</td>
+      <td>Z1</td>
+      <td>0.8506</td>
+      <td>0.0000</td>
+      <td>0.8506</td>
+    </tr>
+    <tr>
+      <th>X2 -&gt; Y</th>
+      <td>X2</td>
+      <td>Y</td>
+      <td>0.3954</td>
+      <td>0.4916</td>
+      <td>0.8871</td>
+    </tr>
+    <tr>
+      <th>X1 -&gt; Z2</th>
+      <td>X1</td>
+      <td>Z2</td>
+      <td>0.2693</td>
+      <td>0.0000</td>
+      <td>0.2693</td>
+    </tr>
+    <tr>
+      <th>X1 -&gt; Z1</th>
+      <td>X1</td>
+      <td>Z1</td>
+      <td>0.1098</td>
+      <td>0.0000</td>
+      <td>0.1098</td>
+    </tr>
+    <tr>
+      <th>X1 -&gt; Y</th>
+      <td>X1</td>
+      <td>Y</td>
+      <td>-0.0964</td>
+      <td>0.1224</td>
+      <td>0.0260</td>
+    </tr>
+    <tr>
+      <th>Z2 -&gt; Y</th>
+      <td>Z2</td>
+      <td>Y</td>
+      <td>0.3093</td>
+      <td>0.0000</td>
+      <td>0.3093</td>
+    </tr>
+    <tr>
+      <th>Z1 -&gt; Y</th>
+      <td>Z1</td>
+      <td>Y</td>
+      <td>0.3559</td>
+      <td>0.0000</td>
+      <td>0.3559</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+<div class="card">
+  <details><summary><h2>Cross-Loadings</h2></summary>
+  <div class="ov" style="margin-top:12px"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>X2</th>
+      <th>X1</th>
+      <th>Z2</th>
+      <th>Z1</th>
+      <th>Y</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AvX11</th>
+      <td>0.9167</td>
+      <td>0.9812</td>
+      <td>0.8096</td>
+      <td>0.8920</td>
+      <td>0.8418</td>
+    </tr>
+    <tr>
+      <th>AvX12</th>
+      <td>0.9248</td>
+      <td>0.9725</td>
+      <td>0.8270</td>
+      <td>0.8693</td>
+      <td>0.8467</td>
+    </tr>
+    <tr>
+      <th>AvX13</th>
+      <td>0.9385</td>
+      <td>0.9586</td>
+      <td>0.8482</td>
+      <td>0.9306</td>
+      <td>0.8521</td>
+    </tr>
+    <tr>
+      <th>AvX21</th>
+      <td>0.9704</td>
+      <td>0.9059</td>
+      <td>0.8643</td>
+      <td>0.9345</td>
+      <td>0.9048</td>
+    </tr>
+    <tr>
+      <th>AvX22</th>
+      <td>0.9721</td>
+      <td>0.9301</td>
+      <td>0.8348</td>
+      <td>0.9327</td>
+      <td>0.9009</td>
+    </tr>
+    <tr>
+      <th>AvX23</th>
+      <td>0.9363</td>
+      <td>0.9046</td>
+      <td>0.8095</td>
+      <td>0.8597</td>
+      <td>0.8306</td>
+    </tr>
+    <tr>
+      <th>AvX24</th>
+      <td>0.9674</td>
+      <td>0.9219</td>
+      <td>0.8303</td>
+      <td>0.9521</td>
+      <td>0.8753</td>
+    </tr>
+    <tr>
+      <th>AvZ11</th>
+      <td>0.9415</td>
+      <td>0.9010</td>
+      <td>0.8564</td>
+      <td>0.9802</td>
+      <td>0.9063</td>
+    </tr>
+    <tr>
+      <th>AvZ12</th>
+      <td>0.9061</td>
+      <td>0.8932</td>
+      <td>0.8921</td>
+      <td>0.9622</td>
+      <td>0.8922</td>
+    </tr>
+    <tr>
+      <th>AvZ13</th>
+      <td>0.9352</td>
+      <td>0.9014</td>
+      <td>0.8457</td>
+      <td>0.9830</td>
+      <td>0.8812</td>
+    </tr>
+    <tr>
+      <th>AvZ14</th>
+      <td>0.9523</td>
+      <td>0.9033</td>
+      <td>0.8629</td>
+      <td>0.9846</td>
+      <td>0.9106</td>
+    </tr>
+    <tr>
+      <th>AvZ21</th>
+      <td>0.7752</td>
+      <td>0.7787</td>
+      <td>0.9047</td>
+      <td>0.7876</td>
+      <td>0.7668</td>
+    </tr>
+    <tr>
+      <th>AvZ22</th>
+      <td>0.8034</td>
+      <td>0.7797</td>
+      <td>0.9080</td>
+      <td>0.7961</td>
+      <td>0.8259</td>
+    </tr>
+    <tr>
+      <th>AvZ23</th>
+      <td>0.7830</td>
+      <td>0.7608</td>
+      <td>0.9083</td>
+      <td>0.8196</td>
+      <td>0.8142</td>
+    </tr>
+    <tr>
+      <th>AvY1</th>
+      <td>0.9216</td>
+      <td>0.8681</td>
+      <td>0.8793</td>
+      <td>0.9230</td>
+      <td>0.9548</td>
+    </tr>
+    <tr>
+      <th>AvY2</th>
+      <td>0.8775</td>
+      <td>0.8426</td>
+      <td>0.8490</td>
+      <td>0.8967</td>
+      <td>0.9620</td>
+    </tr>
+    <tr>
+      <th>AvY3</th>
+      <td>0.8616</td>
+      <td>0.8362</td>
+      <td>0.8164</td>
+      <td>0.8804</td>
+      <td>0.9211</td>
+    </tr>
+    <tr>
+      <th>AvY4</th>
+      <td>0.7763</td>
+      <td>0.7515</td>
+      <td>0.7828</td>
+      <td>0.7605</td>
+      <td>0.9039</td>
+    </tr>
+    <tr>
+      <th>AvY5</th>
+      <td>0.8710</td>
+      <td>0.8190</td>
+      <td>0.8465</td>
+      <td>0.8822</td>
+      <td>0.9691</td>
+    </tr>
+  </tbody>
+</table></div>
+  </details>
+</div>
+
+<div class="card">
+  <details><summary><h2>Bootstrap — Outer Loadings</h2></summary>
+  <div class="ov" style="margin-top:12px"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>original</th>
+      <th>mean</th>
+      <th>std.error</th>
+      <th>perc.025</th>
+      <th>perc.975</th>
+      <th>t stat.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AvX11</th>
+      <td>0.9812</td>
+      <td>0.9809</td>
+      <td>0.0069</td>
+      <td>0.9652</td>
+      <td>0.9920</td>
+      <td>141.4156</td>
+    </tr>
+    <tr>
+      <th>AvX12</th>
+      <td>0.9725</td>
+      <td>0.9730</td>
+      <td>0.0082</td>
+      <td>0.9550</td>
+      <td>0.9863</td>
+      <td>118.4105</td>
+    </tr>
+    <tr>
+      <th>AvX13</th>
+      <td>0.9586</td>
+      <td>0.9576</td>
+      <td>0.0171</td>
+      <td>0.9164</td>
+      <td>0.9837</td>
+      <td>56.1190</td>
+    </tr>
+    <tr>
+      <th>AvX21</th>
+      <td>0.9704</td>
+      <td>0.9690</td>
+      <td>0.0120</td>
+      <td>0.9408</td>
+      <td>0.9862</td>
+      <td>81.1890</td>
+    </tr>
+    <tr>
+      <th>AvX22</th>
+      <td>0.9721</td>
+      <td>0.9713</td>
+      <td>0.0094</td>
+      <td>0.9493</td>
+      <td>0.9863</td>
+      <td>103.5506</td>
+    </tr>
+    <tr>
+      <th>AvX23</th>
+      <td>0.9363</td>
+      <td>0.9363</td>
+      <td>0.0212</td>
+      <td>0.8900</td>
+      <td>0.9737</td>
+      <td>44.2139</td>
+    </tr>
+    <tr>
+      <th>AvX24</th>
+      <td>0.9674</td>
+      <td>0.9664</td>
+      <td>0.0134</td>
+      <td>0.9352</td>
+      <td>0.9863</td>
+      <td>72.4387</td>
+    </tr>
+    <tr>
+      <th>AvZ11</th>
+      <td>0.9802</td>
+      <td>0.9799</td>
+      <td>0.0082</td>
+      <td>0.9593</td>
+      <td>0.9922</td>
+      <td>119.9434</td>
+    </tr>
+    <tr>
+      <th>AvZ12</th>
+      <td>0.9622</td>
+      <td>0.9616</td>
+      <td>0.0155</td>
+      <td>0.9255</td>
+      <td>0.9849</td>
+      <td>61.9045</td>
+    </tr>
+    <tr>
+      <th>AvZ13</th>
+      <td>0.9830</td>
+      <td>0.9823</td>
+      <td>0.0072</td>
+      <td>0.9652</td>
+      <td>0.9930</td>
+      <td>135.7805</td>
+    </tr>
+    <tr>
+      <th>AvZ14</th>
+      <td>0.9846</td>
+      <td>0.9840</td>
+      <td>0.0070</td>
+      <td>0.9674</td>
+      <td>0.9944</td>
+      <td>140.8458</td>
+    </tr>
+    <tr>
+      <th>AvZ21</th>
+      <td>0.9047</td>
+      <td>0.9039</td>
+      <td>0.0278</td>
+      <td>0.8411</td>
+      <td>0.9518</td>
+      <td>32.5518</td>
+    </tr>
+    <tr>
+      <th>AvZ22</th>
+      <td>0.9080</td>
+      <td>0.9084</td>
+      <td>0.0338</td>
+      <td>0.8313</td>
+      <td>0.9640</td>
+      <td>26.8908</td>
+    </tr>
+    <tr>
+      <th>AvZ23</th>
+      <td>0.9083</td>
+      <td>0.9101</td>
+      <td>0.0305</td>
+      <td>0.8433</td>
+      <td>0.9611</td>
+      <td>29.7431</td>
+    </tr>
+    <tr>
+      <th>AvY1</th>
+      <td>0.9548</td>
+      <td>0.9536</td>
+      <td>0.0160</td>
+      <td>0.9162</td>
+      <td>0.9783</td>
+      <td>59.5042</td>
+    </tr>
+    <tr>
+      <th>AvY2</th>
+      <td>0.9620</td>
+      <td>0.9615</td>
+      <td>0.0120</td>
+      <td>0.9354</td>
+      <td>0.9816</td>
+      <td>80.4786</td>
+    </tr>
+    <tr>
+      <th>AvY3</th>
+      <td>0.9211</td>
+      <td>0.9192</td>
+      <td>0.0429</td>
+      <td>0.8118</td>
+      <td>0.9751</td>
+      <td>21.4896</td>
+    </tr>
+    <tr>
+      <th>AvY4</th>
+      <td>0.9039</td>
+      <td>0.9149</td>
+      <td>0.0310</td>
+      <td>0.8650</td>
+      <td>0.9796</td>
+      <td>29.1279</td>
+    </tr>
+    <tr>
+      <th>AvY5</th>
+      <td>0.9691</td>
+      <td>0.9690</td>
+      <td>0.0096</td>
+      <td>0.9465</td>
+      <td>0.9846</td>
+      <td>100.6268</td>
+    </tr>
+  </tbody>
+</table></div>
+  </details>
+</div>
+
+<div class="card">
+  <details><summary><h2>Bootstrap — Total Effects</h2></summary>
+  <div class="ov" style="margin-top:12px"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>original</th>
+      <th>mean</th>
+      <th>std.error</th>
+      <th>perc.025</th>
+      <th>perc.975</th>
+      <th>t stat.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X2 -&gt; Z2</th>
+      <td>0.6108</td>
+      <td>0.5926</td>
+      <td>0.1855</td>
+      <td>0.1865</td>
+      <td>0.9348</td>
+      <td>3.2918</td>
+    </tr>
+    <tr>
+      <th>X2 -&gt; Z1</th>
+      <td>0.8506</td>
+      <td>0.8389</td>
+      <td>0.1681</td>
+      <td>0.5057</td>
+      <td>1.1656</td>
+      <td>5.0590</td>
+    </tr>
+    <tr>
+      <th>X2 -&gt; Y</th>
+      <td>0.8871</td>
+      <td>0.8627</td>
+      <td>0.1821</td>
+      <td>0.4654</td>
+      <td>1.1830</td>
+      <td>4.8720</td>
+    </tr>
+    <tr>
+      <th>X1 -&gt; Z2</th>
+      <td>0.2693</td>
+      <td>0.2843</td>
+      <td>0.1889</td>
+      <td>-0.0624</td>
+      <td>0.6907</td>
+      <td>1.4257</td>
+    </tr>
+    <tr>
+      <th>X1 -&gt; Z1</th>
+      <td>0.1098</td>
+      <td>0.1207</td>
+      <td>0.1776</td>
+      <td>-0.2336</td>
+      <td>0.4701</td>
+      <td>0.6184</td>
+    </tr>
+    <tr>
+      <th>X1 -&gt; Y</th>
+      <td>0.0260</td>
+      <td>0.0484</td>
+      <td>0.1884</td>
+      <td>-0.2844</td>
+      <td>0.4598</td>
+      <td>0.1378</td>
+    </tr>
+    <tr>
+      <th>Z2 -&gt; Y</th>
+      <td>0.3093</td>
+      <td>0.3084</td>
+      <td>0.1056</td>
+      <td>0.1200</td>
+      <td>0.5360</td>
+      <td>2.9280</td>
+    </tr>
+    <tr>
+      <th>Z1 -&gt; Y</th>
+      <td>0.3559</td>
+      <td>0.3600</td>
+      <td>0.2036</td>
+      <td>-0.0164</td>
+      <td>0.7671</td>
+      <td>1.7482</td>
+    </tr>
+  </tbody>
+</table></div>
+  </details>
+</div>
+
+<div class="card">
+  <details><summary><h2>Inner Model Full Summary</h2></summary>
+  <div class="ov" style="margin-top:12px"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>type</th>
+      <th>r_squared</th>
+      <th>r_squared_adj</th>
+      <th>block_communality</th>
+      <th>mean_redundancy</th>
+      <th>ave</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X1</th>
+      <td>Exogenous</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.9425</td>
+      <td>0.0000</td>
+      <td>0.9425</td>
+    </tr>
+    <tr>
+      <th>X2</th>
+      <td>Exogenous</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.9248</td>
+      <td>0.0000</td>
+      <td>0.9248</td>
+    </tr>
+    <tr>
+      <th>Y</th>
+      <td>Endogenous</td>
+      <td>0.8771</td>
+      <td>0.8749</td>
+      <td>0.8884</td>
+      <td>0.7792</td>
+      <td>0.8884</td>
+    </tr>
+    <tr>
+      <th>Z1</th>
+      <td>Endogenous</td>
+      <td>0.9136</td>
+      <td>0.9128</td>
+      <td>0.9556</td>
+      <td>0.8730</td>
+      <td>0.9556</td>
+    </tr>
+    <tr>
+      <th>Z2</th>
+      <td>Endogenous</td>
+      <td>0.7590</td>
+      <td>0.7569</td>
+      <td>0.8226</td>
+      <td>0.6244</td>
+      <td>0.8226</td>
+    </tr>
+  </tbody>
+</table></div>
+  </details>
+</div>
+
+
+<div class="card">
+  <details><summary><h2>Per-Item Outer Loadings</h2></summary>
+  <div class="ov" style="margin-top:12px"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>weight</th>
+      <th>loading</th>
+      <th>communality</th>
+      <th>redundancy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>X112</th>
+      <td>0.2717</td>
+      <td>0.9182</td>
+      <td>0.8430</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X113</th>
+      <td>0.2651</td>
+      <td>0.8982</td>
+      <td>0.8068</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X114</th>
+      <td>0.3027</td>
+      <td>0.8503</td>
+      <td>0.7229</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X121</th>
+      <td>0.3095</td>
+      <td>0.9177</td>
+      <td>0.8422</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X124</th>
+      <td>0.2522</td>
+      <td>0.8977</td>
+      <td>0.8058</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X125</th>
+      <td>0.3290</td>
+      <td>0.8753</td>
+      <td>0.7662</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X131</th>
+      <td>0.2690</td>
+      <td>0.9310</td>
+      <td>0.8668</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X132</th>
+      <td>0.2533</td>
+      <td>0.8881</td>
+      <td>0.7887</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X133</th>
+      <td>0.2581</td>
+      <td>0.9253</td>
+      <td>0.8563</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X211</th>
+      <td>0.2001</td>
+      <td>0.9173</td>
+      <td>0.8414</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X212</th>
+      <td>0.2195</td>
+      <td>0.9505</td>
+      <td>0.9034</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X213</th>
+      <td>0.2072</td>
+      <td>0.8960</td>
+      <td>0.8029</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X221</th>
+      <td>0.2247</td>
+      <td>0.9002</td>
+      <td>0.8104</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X222</th>
+      <td>0.2209</td>
+      <td>0.9121</td>
+      <td>0.8320</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X223</th>
+      <td>0.2151</td>
+      <td>0.9329</td>
+      <td>0.8703</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X231</th>
+      <td>0.2201</td>
+      <td>0.9473</td>
+      <td>0.8974</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X232</th>
+      <td>0.2090</td>
+      <td>0.9354</td>
+      <td>0.8749</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X233</th>
+      <td>0.2435</td>
+      <td>0.6760</td>
+      <td>0.4570</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X241</th>
+      <td>0.2108</td>
+      <td>0.9513</td>
+      <td>0.9050</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X242</th>
+      <td>0.2141</td>
+      <td>0.8594</td>
+      <td>0.7385</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>X243</th>
+      <td>0.2291</td>
+      <td>0.9692</td>
+      <td>0.9394</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>Y11</th>
+      <td>0.1639</td>
+      <td>0.9198</td>
+      <td>0.8461</td>
+      <td>0.7419</td>
+    </tr>
+    <tr>
+      <th>Y12</th>
+      <td>0.1624</td>
+      <td>0.9292</td>
+      <td>0.8635</td>
+      <td>0.7572</td>
+    </tr>
+    <tr>
+      <th>Y13</th>
+      <td>0.1613</td>
+      <td>0.9506</td>
+      <td>0.9037</td>
+      <td>0.7925</td>
+    </tr>
+    <tr>
+      <th>Y21</th>
+      <td>0.1744</td>
+      <td>0.9218</td>
+      <td>0.8498</td>
+      <td>0.7452</td>
+    </tr>
+    <tr>
+      <th>Y22</th>
+      <td>0.1702</td>
+      <td>0.9215</td>
+      <td>0.8491</td>
+      <td>0.7446</td>
+    </tr>
+    <tr>
+      <th>Y23</th>
+      <td>0.1588</td>
+      <td>0.9470</td>
+      <td>0.8969</td>
+      <td>0.7865</td>
+    </tr>
+    <tr>
+      <th>Y31</th>
+      <td>0.1546</td>
+      <td>0.9132</td>
+      <td>0.8339</td>
+      <td>0.7312</td>
+    </tr>
+    <tr>
+      <th>Y32</th>
+      <td>0.1513</td>
+      <td>0.9072</td>
+      <td>0.8229</td>
+      <td>0.7216</td>
+    </tr>
+    <tr>
+      <th>Y33</th>
+      <td>0.1488</td>
+      <td>0.8852</td>
+      <td>0.7837</td>
+      <td>0.6872</td>
+    </tr>
+    <tr>
+      <th>Y41</th>
+      <td>0.1669</td>
+      <td>0.8913</td>
+      <td>0.7943</td>
+      <td>0.6966</td>
+    </tr>
+    <tr>
+      <th>Y42</th>
+      <td>0.1668</td>
+      <td>0.8920</td>
+      <td>0.7956</td>
+      <td>0.6977</td>
+    </tr>
+    <tr>
+      <th>Y43</th>
+      <td>0.1622</td>
+      <td>0.8367</td>
+      <td>0.7001</td>
+      <td>0.6139</td>
+    </tr>
+    <tr>
+      <th>Y51</th>
+      <td>0.1569</td>
+      <td>0.9617</td>
+      <td>0.9249</td>
+      <td>0.8111</td>
+    </tr>
+    <tr>
+      <th>Y52</th>
+      <td>0.1802</td>
+      <td>0.9037</td>
+      <td>0.8166</td>
+      <td>0.7161</td>
+    </tr>
+    <tr>
+      <th>Y53</th>
+      <td>0.1648</td>
+      <td>0.9534</td>
+      <td>0.9090</td>
+      <td>0.7971</td>
+    </tr>
+    <tr>
+      <th>Z111</th>
+      <td>0.2252</td>
+      <td>0.9316</td>
+      <td>0.8679</td>
+      <td>0.7902</td>
+    </tr>
+    <tr>
+      <th>Z112</th>
+      <td>0.2091</td>
+      <td>0.9032</td>
+      <td>0.8158</td>
+      <td>0.7428</td>
+    </tr>
+    <tr>
+      <th>Z113</th>
+      <td>0.2334</td>
+      <td>0.9490</td>
+      <td>0.9006</td>
+      <td>0.8200</td>
+    </tr>
+    <tr>
+      <th>Z121</th>
+      <td>0.2301</td>
+      <td>0.9450</td>
+      <td>0.8929</td>
+      <td>0.8130</td>
+    </tr>
+    <tr>
+      <th>Z122</th>
+      <td>0.2019</td>
+      <td>0.9126</td>
+      <td>0.8328</td>
+      <td>0.7583</td>
+    </tr>
+    <tr>
+      <th>Z123</th>
+      <td>0.2177</td>
+      <td>0.8101</td>
+      <td>0.6563</td>
+      <td>0.5976</td>
+    </tr>
+    <tr>
+      <th>Z131</th>
+      <td>0.2137</td>
+      <td>0.9675</td>
+      <td>0.9360</td>
+      <td>0.8522</td>
+    </tr>
+    <tr>
+      <th>Z132</th>
+      <td>0.2204</td>
+      <td>0.9472</td>
+      <td>0.8972</td>
+      <td>0.8169</td>
+    </tr>
+    <tr>
+      <th>Z133</th>
+      <td>0.2045</td>
+      <td>0.9537</td>
+      <td>0.9096</td>
+      <td>0.8282</td>
+    </tr>
+    <tr>
+      <th>Z141</th>
+      <td>0.2073</td>
+      <td>0.9551</td>
+      <td>0.9121</td>
+      <td>0.8305</td>
+    </tr>
+    <tr>
+      <th>Z142</th>
+      <td>0.2163</td>
+      <td>0.9543</td>
+      <td>0.9106</td>
+      <td>0.8291</td>
+    </tr>
+    <tr>
+      <th>Z143</th>
+      <td>0.2218</td>
+      <td>0.9341</td>
+      <td>0.8726</td>
+      <td>0.7945</td>
+    </tr>
+    <tr>
+      <th>Z211</th>
+      <td>0.2587</td>
+      <td>0.8805</td>
+      <td>0.7753</td>
+      <td>0.5813</td>
+    </tr>
+    <tr>
+      <th>Z212</th>
+      <td>0.2613</td>
+      <td>0.8602</td>
+      <td>0.7400</td>
+      <td>0.5548</td>
+    </tr>
+    <tr>
+      <th>Z213</th>
+      <td>0.3214</td>
+      <td>0.6709</td>
+      <td>0.4500</td>
+      <td>0.3375</td>
+    </tr>
+    <tr>
+      <th>Z221</th>
+      <td>0.2778</td>
+      <td>0.8501</td>
+      <td>0.7227</td>
+      <td>0.5419</td>
+    </tr>
+    <tr>
+      <th>Z222</th>
+      <td>0.2837</td>
+      <td>0.8024</td>
+      <td>0.6439</td>
+      <td>0.4828</td>
+    </tr>
+    <tr>
+      <th>Z223</th>
+      <td>0.2817</td>
+      <td>0.8538</td>
+      <td>0.7290</td>
+      <td>0.5466</td>
+    </tr>
+    <tr>
+      <th>Z231</th>
+      <td>0.2907</td>
+      <td>0.7276</td>
+      <td>0.5294</td>
+      <td>0.3970</td>
+    </tr>
+    <tr>
+      <th>Z232</th>
+      <td>0.2844</td>
+      <td>0.8819</td>
+      <td>0.7778</td>
+      <td>0.5832</td>
+    </tr>
+    <tr>
+      <th>Z233</th>
+      <td>0.3492</td>
+      <td>0.7955</td>
+      <td>0.6329</td>
+      <td>0.4746</td>
+    </tr>
+  </tbody>
+</table></div>
+  </details>
+</div>
+
+<p class="legend" style="text-align:center;margin-top:8px">
+  Generated by plscl.py
+</p>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   DIAGRAM RESIZE CONTROLS
+   ════════════════════════════════════════════════════════════════════ */
+var _fitVP = false;
+
+function toggleFitViewport() {
+  _fitVP = !_fitVP;
+  var wrap = document.getElementById('diagram-wrap');
+  var btn  = document.getElementById('btn-fit-vp');
+  if (_fitVP) {
+    /* body has 20px padding each side, card has 20px padding each side → 80px total */
+    wrap.style.width = (window.innerWidth - 80) + 'px';
+    btn.classList.add('active');
+    btn.textContent = '↔ Fitted to Viewport';
+  } else {
+    wrap.style.width = '100%';
+    btn.classList.remove('active');
+    btn.textContent = '↔ Fit Viewport Width';
+  }
+}
+
+function resetDiagramSize() {
+  _fitVP = false;
+  var wrap = document.getElementById('diagram-wrap');
+  var btn  = document.getElementById('btn-fit-vp');
+  wrap.style.width  = '100%';
+  wrap.style.height = 'calc(100vh - 180px)';
+  btn.classList.remove('active');
+  btn.textContent = '↔ Fit Viewport Width';
+}
+
+/* Keep "Fit Viewport Width" state in sync when user manually resizes */
+document.getElementById('diagram-wrap').addEventListener('mouseup', function() {
+  _fitVP = false;
+  var btn = document.getElementById('btn-fit-vp');
+  btn.classList.remove('active');
+  btn.textContent = '↔ Fit Viewport Width';
+});
+
+
+/* ════════════════════════════════════════════════════════════════════
+   TABLE UTILITY FUNCTIONS
+   ════════════════════════════════════════════════════════════════════ */
+
+/** Extract table as tab-separated text (pastes cleanly into Excel / Word). */
+function _tableToTSV(tbl) {
+  var rows = tbl.querySelectorAll('tr');
+  var lines = [];
+  rows.forEach(function(row) {
+    var cells = row.querySelectorAll('th, td');
+    var parts = [];
+    cells.forEach(function(c) { parts.push(c.innerText.trim()); });
+    lines.push(parts.join('\t'));
+  });
+  return lines.join('\n');
+}
+
+/** Extract table as CSV text. */
+function _tableToCSV(tbl) {
+  var rows = tbl.querySelectorAll('tr');
+  var lines = [];
+  rows.forEach(function(row) {
+    var cells = row.querySelectorAll('th, td');
+    var parts = [];
+    cells.forEach(function(c) {
+      var v = c.innerText.trim().replace(/"/g, '""');
+      parts.push('"' + v + '"');
+    });
+    lines.push(parts.join(','));
+  });
+  return lines.join('\n');
+}
+
+/** Copy table as TSV to clipboard; flash button green on success. */
+function copyTableTSV(btn, tbl) {
+  var text = _tableToTSV(tbl);
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('ok');
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.classList.remove('ok');
+    }, 1600);
+  }).catch(function() {
+    /* Fallback for older browsers */
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity  = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('ok');
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.classList.remove('ok');
+    }, 1600);
+  });
+}
+
+/** Download table as a CSV file. */
+function downloadTableCSV(tbl, filename) {
+  var csv = '﻿' + _tableToCSV(tbl); /* BOM for Excel UTF-8 */
+  var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 200);
+}
+
+/** Derive a safe filename from heading text. */
+function _safeSlug(str) {
+  return str.replace(/[^a-z0-9]+/gi, '_').replace(/^_|_$/g, '').toLowerCase() || 'table';
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   AUTO-INJECT COPY + DOWNLOAD BUTTONS INTO EVERY TABLE
+   ════════════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  /* Track table index for unique filenames when headings clash */
+  var idx = 0;
+
+  document.querySelectorAll('table.tbl, table.dataframe').forEach(function(tbl) {
+    idx++;
+
+    /* ── Find a label for the table (nearest preceding h2) ── */
+    var label = '';
+    /* Walk up through parents looking for h2 siblings or contained h2 */
+    var node = tbl;
+    while (node && node !== document.body) {
+      /* check siblings before this node */
+      var sib = node.previousElementSibling;
+      while (sib) {
+        if (sib.tagName === 'H2' || sib.tagName === 'SUMMARY') {
+          var h = sib.tagName === 'SUMMARY' ? sib.querySelector('h2') : sib;
+          if (h) { label = h.innerText.trim(); break; }
+        }
+        sib = sib.previousElementSibling;
+      }
+      if (label) break;
+      /* check if parent card has h2 */
+      if (node.classList && node.classList.contains('card')) {
+        var h2 = node.querySelector(':scope > h2');
+        if (h2) { label = h2.innerText.trim(); break; }
+      }
+      node = node.parentElement;
+    }
+    var slug = (label ? _safeSlug(label) : 'table') + '_' + idx;
+
+    /* ── Build toolbar ── */
+    var tb = document.createElement('div');
+    tb.className = 'tbl-toolbar';
+
+    var btnCopy = document.createElement('button');
+    btnCopy.className = 'btn-tool';
+    btnCopy.title     = 'Copy as tab-separated text — paste directly into Excel or Word';
+    btnCopy.innerHTML = '&#128203; Copy table';
+    btnCopy.addEventListener('click', function() { copyTableTSV(btnCopy, tbl); });
+
+    var btnDl = document.createElement('button');
+    btnDl.className = 'btn-tool dl';
+    btnDl.title     = 'Download as CSV file';
+    btnDl.innerHTML = '&#8681; Download CSV';
+    btnDl.addEventListener('click', function() { downloadTableCSV(tbl, slug); });
+
+    tb.appendChild(btnCopy);
+    tb.appendChild(btnDl);
+
+    /* ── Insert toolbar before the scrollable wrapper (or the table itself) ── */
+    var ovDiv = tbl.closest('.ov');
+    var insertTarget = ovDiv ? ovDiv : tbl;
+    insertTarget.parentElement.insertBefore(tb, insertTarget);
+  });
+});
+</script>
+</body>
+</html>

@@ -49,7 +49,6 @@ details[open] summary::after { content: ' ▴'; }
   position: relative;
   box-sizing: border-box;
 }
-#diagram-wrap.fit-vp { width: calc(100vw - 80px); }
 .diag-toolbar { display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap; }
 
 /* ── table toolbar buttons ── */
@@ -79,19 +78,31 @@ details[open] summary::after { content: ' ▴'; }
 <div class="card">
   <h2>Structural Model Diagram</h2>
   <div class="diag-toolbar">
-    <button class="btn-tool" id="btn-fit-vp" onclick="toggleFitViewport()">↔ Fit Viewport Width</button>
-    <button class="btn-tool" onclick="resetDiagramSize()">⤢ Reset Size</button>
-    <span style="font-size:.72rem;color:#94a3b8">Drag the ↘ corner to resize in any direction</span>
+    <button class="btn-tool" id="btn-fit-vp" onclick="toggleFitViewport()">&#8596; Fit Viewport Width</button>
+    <button class="btn-tool" onclick="resetDiagramSize()">&#10562; Reset Size</button>
+    <span style="display:inline-flex;align-items:center;gap:4px">
+      <button class="btn-tool" onclick="diagFontSize(-1)" title="Decrease font size" style="font-weight:700;padding:3px 8px">A&#8722;</button>
+      <span id="btn-font-size-lbl" style="font-size:.72rem;color:#64748b;min-width:32px;text-align:center">100%</span>
+      <button class="btn-tool" onclick="diagFontSize(+1)" title="Increase font size" style="font-weight:700;padding:3px 8px">A+</button>
+    </span>
+    <span style="display:inline-flex;align-items:center;gap:4px;margin-left:4px">
+      <button class="btn-tool dl" onclick="downloadDiagram('png',false)" title="Download PNG in full colour">&#11015; PNG Color</button>
+      <button class="btn-tool dl" onclick="downloadDiagram('png',true)"  title="Download PNG in black &amp; white">&#11015; PNG B&amp;W</button>
+      <button class="btn-tool dl" onclick="downloadDiagram('svg',false)" title="Download SVG vector (colour)">&#11015; SVG Color</button>
+      <button class="btn-tool dl" onclick="downloadDiagram('svg',true)"  title="Download SVG vector (black &amp; white)">&#11015; SVG B&amp;W</button>
+    </span>
+    <span style="font-size:.72rem;color:#94a3b8">Drag the &#8600; corner to resize in any direction</span>
   </div>
   <div id="diagram-wrap"><div style="position:relative;user-select:none;width:100%;height:100%">
 <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 1120 580" width="100%" height="100%"
      style="background:#f8fafc;border-radius:8px;display:block;cursor:default">
   <defs>
-    <marker id="d-arr"       markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#555"/></marker>
-    <marker id="d-arr-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#059669"/></marker>
-    <marker id="d-arr-red"   markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#ef4444"/></marker>
-    <marker id="d-arr-blue"  markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#3b82f6"/></marker>
+    <marker id="d-arr"          markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#555"/></marker>
+    <marker id="d-arr-green"    markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#059669"/></marker>
+    <marker id="d-arr-red"      markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#ef4444"/></marker>
+    <marker id="d-arr-blue"     markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#3b82f6"/></marker>
+    <marker id="d-arr-red-dash" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#ef4444"/></marker>
   </defs>
   <g id="diagram-content"></g>
 </svg>
@@ -102,7 +113,7 @@ details[open] summary::after { content: ' ▴'; }
     style="float:right;border:none;background:none;cursor:pointer;color:#94a3b8;font-size:1.1rem;line-height:1">×</button>
   <div id="d-info-body"></div>
 </div>
-</div></div>
+</div>
 <script>
 (function(){
   const D = {
@@ -413,10 +424,10 @@ details[open] summary::after { content: ' ▴'; }
       "to": "Y",
       "hyp": "H1",
       "coef": -0.0964,
-      "p": 0.8904,
-      "t": 0.1378,
-      "ci_lo": -0.2844,
-      "ci_hi": 0.4598,
+      "p": 0.8912,
+      "t": 0.1368,
+      "ci_lo": -0.2879,
+      "ci_hi": 0.4383,
       "sig": "ns"
     },
     {
@@ -424,10 +435,10 @@ details[open] summary::after { content: ' ▴'; }
       "to": "Z1",
       "hyp": "H2",
       "coef": 0.1098,
-      "p": 0.5363,
-      "t": 0.6184,
-      "ci_lo": -0.2336,
-      "ci_hi": 0.4701,
+      "p": 0.5293,
+      "t": 0.6291,
+      "ci_lo": -0.2355,
+      "ci_hi": 0.4412,
       "sig": "ns"
     },
     {
@@ -435,10 +446,10 @@ details[open] summary::after { content: ' ▴'; }
       "to": "Z2",
       "hyp": "H3",
       "coef": 0.2693,
-      "p": 0.154,
-      "t": 1.4257,
-      "ci_lo": -0.0624,
-      "ci_hi": 0.6907,
+      "p": 0.1594,
+      "t": 1.4074,
+      "ci_lo": -0.0722,
+      "ci_hi": 0.6749,
       "sig": "ns"
     },
     {
@@ -447,9 +458,9 @@ details[open] summary::after { content: ' ▴'; }
       "hyp": "H4",
       "coef": 0.3954,
       "p": 0.0,
-      "t": 4.872,
-      "ci_lo": 0.4654,
-      "ci_hi": 1.183,
+      "t": 4.8186,
+      "ci_lo": 0.4936,
+      "ci_hi": 1.1904,
       "sig": "***"
     },
     {
@@ -457,10 +468,10 @@ details[open] summary::after { content: ' ▴'; }
       "to": "Z2",
       "hyp": "H5",
       "coef": 0.6108,
-      "p": 0.001,
-      "t": 3.2918,
-      "ci_lo": 0.1865,
-      "ci_hi": 0.9348,
+      "p": 0.0012,
+      "t": 3.237,
+      "ci_lo": 0.2149,
+      "ci_hi": 0.9496,
       "sig": "**"
     },
     {
@@ -469,9 +480,9 @@ details[open] summary::after { content: ' ▴'; }
       "hyp": "H6",
       "coef": 0.8506,
       "p": 0.0,
-      "t": 5.059,
-      "ci_lo": 0.5057,
-      "ci_hi": 1.1656,
+      "t": 5.1331,
+      "ci_lo": 0.5431,
+      "ci_hi": 1.1782,
       "sig": "***"
     },
     {
@@ -479,10 +490,10 @@ details[open] summary::after { content: ' ▴'; }
       "to": "Y",
       "hyp": "H7",
       "coef": 0.3559,
-      "p": 0.0805,
-      "t": 1.7482,
-      "ci_lo": -0.0164,
-      "ci_hi": 0.7671,
+      "p": 0.0791,
+      "t": 1.7564,
+      "ci_lo": -0.001,
+      "ci_hi": 0.7768,
       "sig": "ns"
     },
     {
@@ -490,10 +501,10 @@ details[open] summary::after { content: ' ▴'; }
       "to": "Y",
       "hyp": "H8",
       "coef": 0.3093,
-      "p": 0.0034,
-      "t": 2.928,
-      "ci_lo": 0.12,
-      "ci_hi": 0.536,
+      "p": 0.0033,
+      "t": 2.9371,
+      "ci_lo": 0.1122,
+      "ci_hi": 0.5305,
       "sig": "**"
     }
   ],
@@ -506,8 +517,8 @@ details[open] summary::after { content: ' ▴'; }
       ],
       "hyp": "H9",
       "est": 0.0391,
-      "p": 0.5599,
-      "t": 0.583,
+      "p": 0.5537,
+      "t": 0.5922,
       "sig": "ns",
       "medAbove": true
     },
@@ -519,8 +530,8 @@ details[open] summary::after { content: ' ▴'; }
       ],
       "hyp": "H10",
       "est": 0.0833,
-      "p": 0.2,
-      "t": 1.2818,
+      "p": 0.2044,
+      "t": 1.2692,
       "sig": "ns",
       "medAbove": false
     },
@@ -532,8 +543,8 @@ details[open] summary::after { content: ' ▴'; }
       ],
       "hyp": "H11",
       "est": 0.1889,
-      "p": 0.0287,
-      "t": 2.1878,
+      "p": 0.0297,
+      "t": 2.1751,
       "sig": "*",
       "medAbove": false
     },
@@ -545,8 +556,8 @@ details[open] summary::after { content: ' ▴'; }
       ],
       "hyp": "H12",
       "est": 0.3027,
-      "p": 0.0985,
-      "t": 1.6523,
+      "p": 0.0966,
+      "t": 1.6618,
       "sig": "ns",
       "medAbove": true
     }
@@ -565,12 +576,12 @@ details[open] summary::after { content: ' ▴'; }
   let drag = null; /* {id, ox, oy, moved} */
   let selected = null;
 
-  /* ── group / tether state (default: all LVs locked to their indicators) ── */
+  /* ── group/tether state (default: all LVs locked to their indicators) ── */
   const locked = {};
   Object.keys(D.lv).forEach(k => { locked[k] = true; });
-  let groupOffsets = {};   /* indId → {dx,dy} relative to dragged LV */
+  let groupOffsets = {};
 
-  /* ── edge hover tooltip registry (rebuilt each render) ── */
+  /* ── edge tooltip data registry (rebuilt each render) ── */
   let edgeData = [];
 
   /* ── geometry ─────────────────────────────────────────────────────────── */
@@ -602,24 +613,26 @@ details[open] summary::after { content: ' ▴'; }
   const sigCol  = p => (p===null||p>=0.05) ? '#dc2626' : '#059669';
   const markSig = p => (p===null||p>=0.05) ? 'url(#d-arr-red)' : 'url(#d-arr-green)';
 
-  /* Convert H1 → H₁, H2a → H₂ₐ using Unicode subscripts */
   const _sub = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉','a':'ₐ','b':'ᵦ'};
   function fmtHyp(h) { return h.replace(/[0-9ab]/g, c => _sub[c]||c); }
+
+  /* ── diagram font scale (default 1.0) ─────────────────────────────────── */
+  let _fsc = 1.0;
 
   function txt(x,y,s,sz,fill,anchor,bold,italic) {
     const fw = bold   ? 'font-weight="bold"'   : '';
     const fi = italic ? 'font-style="italic"'  : '';
     return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor||'middle'}"
-      font-size="${sz}" fill="${fill}" ${fw} ${fi}
+      font-size="${(sz*_fsc).toFixed(1)}" fill="${fill}" ${fw} ${fi}
       font-family="system-ui,sans-serif" style="pointer-events:none">${s}</text>`;
   }
 
   /* ── render ───────────────────────────────────────────────────────────── */
   function render() {
     let out = [];
-    edgeData = [];   /* reset edge tooltip registry */
+    edgeData = [];
 
-    /* 1 — indirect curved arrows (hit-area then visible path) */
+    /* 1 — indirect curved arrows (hit-area + visible) */
     D.indirect.forEach(edge => {
       const f=edge.path[0], t=edge.path[edge.path.length-1];
       const fp=pos[f], tp=pos[t], fr=D.lv[f].r, tr=D.lv[t].r;
@@ -627,18 +640,18 @@ details[open] summary::after { content: ' ▴'; }
       const e2=circleRecv(tp.x,tp.y,tr,fp.x,fp.y,12);
       const cx=(s.x+e2.x)/2;
       const cy = edge.medAbove ? Math.min(s.y,e2.y)-70 : Math.max(s.y,e2.y)+70;
-      const col = (edge.p!==null&&edge.p<0.05) ? '#2563eb' : '#7c3aed';
+      const sig2 = (edge.p!==null&&edge.p<0.05);
+      const col = sig2 ? '#2563eb' : '#ef4444';
+      const mrkr = sig2 ? 'url(#d-arr-blue)' : 'url(#d-arr-red-dash)';
       const pLbl = edge.p!==null ? (edge.p<0.001?'p<0.001':'p='+edge.p.toFixed(3)) : '—';
       const hypPart = edge.hyp ? fmtHyp(edge.hyp)+' ' : '';
       const lbl = hypPart+edge.est.toFixed(3)+' '+edge.sig+' '+pLbl;
       const eid = edgeData.length;
       edgeData.push({type:'indirect', edge});
-      /* transparent wide hit area */
       out.push(`<path d="M${s.x.toFixed(1)},${s.y.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${e2.x.toFixed(1)},${e2.y.toFixed(1)}"
         fill="none" stroke="transparent" stroke-width="14" data-eid="${eid}" class="ehit" style="cursor:crosshair"/>`);
-      /* visible path (pointer-events off — hit area handles hover) */
       out.push(`<path d="M${s.x.toFixed(1)},${s.y.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${e2.x.toFixed(1)},${e2.y.toFixed(1)}"
-        fill="none" stroke="${col}" stroke-width="1.8" stroke-dasharray="7,3" marker-end="url(#d-arr-blue)" style="pointer-events:none"/>`);
+        fill="none" stroke="${col}" stroke-width="1.8" stroke-dasharray="7,3" marker-end="${mrkr}" style="pointer-events:none"/>`);
       out.push(txt(cx,cy-9,lbl,10,col,'middle'));
     });
 
@@ -652,10 +665,8 @@ details[open] summary::after { content: ' ▴'; }
       const col = sigCol(edge.p);
       const eid = edgeData.length;
       edgeData.push({type:'direct', edge});
-      /* transparent hit area */
       out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
         stroke="transparent" stroke-width="14" data-eid="${eid}" class="ehit" style="cursor:crosshair"/>`);
-      /* visible line */
       out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
         stroke="${col}" stroke-width="2.5" marker-end="${markSig(edge.p)}" style="pointer-events:none"/>`);
       if (edge.hyp) {
@@ -675,10 +686,8 @@ details[open] summary::after { content: ' ▴'; }
       const mx=(s.x+e2.x)/2, my=(s.y+e2.y)/2;
       const eid = edgeData.length;
       edgeData.push({type:'indicator', indId:id, ind:d});
-      /* transparent hit area */
       out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
         stroke="transparent" stroke-width="12" data-eid="${eid}" class="ehit" style="cursor:crosshair"/>`);
-      /* visible line */
       out.push(`<line x1="${s.x.toFixed(1)}" y1="${s.y.toFixed(1)}" x2="${e2.x.toFixed(1)}" y2="${e2.y.toFixed(1)}"
         stroke="#94a3b8" stroke-width="1.5" marker-end="url(#d-arr)" style="pointer-events:none"/>`);
       out.push(txt(mx,my-4,d.loading.toFixed(2),9,'#64748b','middle'));
@@ -692,11 +701,11 @@ details[open] summary::after { content: ' ▴'; }
         rx="4" fill="${isSel?'#eff6ff':'white'}" stroke="${sc}" stroke-width="${sw}"
         data-nid="${id}" class="nd" style="cursor:grab"/>`);
       out.push(`<text x="${(p.x+d.w/2).toFixed(1)}" y="${(p.y+d.h/2+4.5).toFixed(1)}"
-        text-anchor="middle" font-size="11" fill="#374151" font-family="system-ui,sans-serif"
+        text-anchor="middle" font-size="${(11*_fsc).toFixed(1)}" fill="#374151" font-family="system-ui,sans-serif"
         data-nid="${id}" class="nd" style="cursor:grab;pointer-events:all">${id}</text>`);
     });
 
-    /* 5 — LV circles with label + lock-toggle badge (draggable, on top) */
+    /* 5 — LV circles with label + lock badge (draggable, on top) */
     Object.entries(D.lv).forEach(([id,d]) => {
       const p=pos[id], isSel=(selected===id);
       const sc=isSel?'#1d4ed8':'#3b82f6', sw=isSel?3.5:2.5;
@@ -704,30 +713,25 @@ details[open] summary::after { content: ' ▴'; }
       out.push(`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${d.r}"
         fill="#eff6ff" stroke="${sc}" stroke-width="${sw}"
         data-nid="${id}" class="nd" style="cursor:grab"/>`);
-      /* label shifted up to leave room for lock badge */
       out.push(`<text x="${p.x.toFixed(1)}" y="${(p.y-2).toFixed(1)}"
-        text-anchor="middle" font-size="13" fill="#1e40af" font-weight="bold"
+        text-anchor="middle" font-size="${(13*_fsc).toFixed(1)}" fill="#1e40af" font-weight="bold"
         font-family="system-ui,sans-serif" data-nid="${id}" class="nd"
         style="cursor:grab;pointer-events:all">${id}</text>`);
-      /* lock-toggle badge — small pill at bottom of circle */
       out.push(`<rect x="${(p.x-13).toFixed(1)}" y="${(p.y+11).toFixed(1)}" width="26" height="16" rx="5"
         fill="${lk?'#dbeafe':'#f1f5f9'}" stroke="${lk?'#3b82f6':'#cbd5e1'}" stroke-width="1.2"
-        data-lock="${id}" class="lktog" style="cursor:pointer" title="${lk?'Click to free indicators':'Click to group indicators'}"/>`);
+        data-lock="${id}" class="lktog" style="cursor:pointer"/>`);
       out.push(`<text x="${p.x.toFixed(1)}" y="${(p.y+22).toFixed(1)}"
-        text-anchor="middle" font-size="10" fill="${lk?'#1d4ed8':'#6b7280'}"
+        text-anchor="middle" font-size="${(10*_fsc).toFixed(1)}" fill="${lk?'#1d4ed8':'#6b7280'}"
         font-family="system-ui,sans-serif" data-lock="${id}" class="lktog"
         style="cursor:pointer;pointer-events:all">${lk?'🔒':'🔓'}</text>`);
     });
 
     grp.innerHTML = out.join('\n');
 
-    /* re-attach drag listeners to draggable nodes */
     grp.querySelectorAll('.nd').forEach(el => {
       el.addEventListener('mousedown',  onDown);
       el.addEventListener('touchstart', onTouch, {passive:false});
     });
-
-    /* lock-toggle click */
     grp.querySelectorAll('.lktog').forEach(el => {
       el.addEventListener('click', e => {
         e.stopPropagation();
@@ -735,11 +739,8 @@ details[open] summary::after { content: ' ▴'; }
         locked[lid] = !locked[lid];
         render();
       });
-      /* prevent drag from starting on the badge */
       el.addEventListener('mousedown', e => e.stopPropagation());
     });
-
-    /* edge hover tooltip listeners */
     grp.querySelectorAll('.ehit').forEach(el => {
       el.addEventListener('mouseover', showLineTip);
       el.addEventListener('mouseout',  hideLineTip);
@@ -747,7 +748,6 @@ details[open] summary::after { content: ' ▴'; }
     });
   }
 
-  /* ── info panel ───────────────────────────────────────────────────────── */
   /* ── info panel (click on node) ──────────────────────────────────────── */
   function showInfo(id) {
     selected = id;
@@ -784,21 +784,25 @@ details[open] summary::after { content: ' ▴'; }
   }
 
   /* ── line hover tooltip ───────────────────────────────────────────────── */
-  const lineTip = document.getElementById('line-tip');
+  /* NOTE: line-tip div lives outside this script block — use lazy lookup    */
+  let _lineTip = null;
+  function lineTip() { return _lineTip || (_lineTip = document.getElementById('line-tip')); }
 
   function showLineTip(e) {
     const data = edgeData[+e.currentTarget.dataset.eid];
-    lineTip.innerHTML = buildTipHtml(data);
-    lineTip.style.display = 'block';
+    if (!data) return;
+    lineTip().innerHTML = buildTipHtml(data);
+    lineTip().style.display = 'block';
     moveLineTip(e);
   }
-  function hideLineTip() { lineTip.style.display = 'none'; }
+  function hideLineTip() { lineTip().style.display = 'none'; }
   function moveLineTip(e) {
-    const x = e.clientX + 16, y = e.clientY - 12;
+    const tip = lineTip();
+    const x = e.clientX+16, y = e.clientY-12;
     const vw = window.innerWidth, vh = window.innerHeight;
-    const tw = lineTip.offsetWidth || 210, th = lineTip.offsetHeight || 160;
-    lineTip.style.left = (x + tw > vw - 6 ? e.clientX - tw - 12 : x) + 'px';
-    lineTip.style.top  = (y + th > vh - 6 ? e.clientY - th - 12 : y) + 'px';
+    const tw = tip.offsetWidth||210, th = tip.offsetHeight||160;
+    tip.style.left = (x+tw > vw-6 ? e.clientX-tw-12 : x) + 'px';
+    tip.style.top  = (y+th > vh-6 ? e.clientY-th-12 : y) + 'px';
   }
   function buildTipHtml(data) {
     const row = (k,v) =>
@@ -807,36 +811,36 @@ details[open] summary::after { content: ' ▴'; }
     let title='', sub='', rows='';
     if (data.type === 'direct') {
       const e=data.edge;
-      const sigCol2 = (e.p===null||e.p>=0.05) ? '#dc2626' : '#059669';
-      title = (e.hyp ? fmtHyp(e.hyp)+' &nbsp;' : '') + `${e.from} &rarr; ${e.to}`;
+      const sc2 = (e.p===null||e.p>=0.05) ? '#dc2626' : '#059669';
+      title = (e.hyp ? fmtHyp(e.hyp)+'&nbsp;&nbsp;' : '') + `${e.from} &rarr; ${e.to}`;
       sub   = 'Direct structural path';
       rows  = [
         row('Coefficient', e.coef.toFixed(4)),
         row('t-statistic', e.t.toFixed(4)),
         row('p-value',     fmtP(e.p)),
-        row('Significance',`<span style="color:${sigCol2};font-weight:700">${e.sig}</span>`),
+        row('Significance',`<span style="color:${sc2};font-weight:700">${e.sig}</span>`),
         row('95% CI',      (!isNaN(e.ci_lo) ? `[${e.ci_lo.toFixed(4)}, ${e.ci_hi.toFixed(4)}]` : '—')),
       ].join('');
     } else if (data.type === 'indirect') {
       const e=data.edge;
-      const sigCol2 = (e.p===null||e.p>=0.05) ? '#7c3aed' : '#2563eb';
-      title = (e.hyp ? fmtHyp(e.hyp)+' &nbsp;' : '') + e.path.join(' &rarr; ');
+      const sc2 = (e.p===null||e.p>=0.05) ? '#ef4444' : '#2563eb';
+      title = (e.hyp ? fmtHyp(e.hyp)+'&nbsp;&nbsp;' : '') + e.path.join(' &rarr; ');
       sub   = 'Indirect / mediation path';
       rows  = [
         row('Estimate',    e.est.toFixed(4)),
         row('t-statistic', e.t.toFixed(4)),
         row('p-value',     fmtP(e.p)),
-        row('Significance',`<span style="color:${sigCol2};font-weight:700">${e.sig}</span>`),
+        row('Significance',`<span style="color:${sc2};font-weight:700">${e.sig}</span>`),
       ].join('');
     } else {
       const d=data.ind, id=data.indId;
       title = `${d.lv} &rarr; ${id}`;
       sub   = d.fullLabel;
       rows  = [
-        row('Loading',      d.loading.toFixed(4)),
-        row('Weight',       d.weight.toFixed(4)),
-        row('Communality',  d.communality.toFixed(4)),
-        row('Redundancy',   d.redundancy.toFixed(4)),
+        row('Loading',     d.loading.toFixed(4)),
+        row('Weight',      d.weight.toFixed(4)),
+        row('Communality', d.communality.toFixed(4)),
+        row('Redundancy',  d.redundancy.toFixed(4)),
       ].join('');
     }
     return `<div style="font-weight:700;font-size:0.82rem;color:#1e40af;margin-bottom:2px">${title}</div>
@@ -847,7 +851,7 @@ details[open] summary::after { content: ' ▴'; }
   /* ── SVG coordinate helper (uses viewBox so scaling is always correct) ── */
   function svgPt(e) {
     const r  = svg.getBoundingClientRect();
-    const vb = svg.viewBox.baseVal;       // always 0 0 1120 580
+    const vb = svg.viewBox.baseVal;
     const sx = vb.width  / r.width;
     const sy = vb.height / r.height;
     return {x:(e.clientX-r.left)*sx, y:(e.clientY-r.top)*sy};
@@ -859,14 +863,10 @@ details[open] summary::after { content: ' ▴'; }
     const id=e.currentTarget.dataset.nid; if(!id) return;
     const p=svgPt(e);
     drag={id, ox:p.x-pos[id].x, oy:p.y-pos[id].y, moved:false};
-    /* if dragging a locked LV, snapshot each indicator's offset from it */
     groupOffsets = {};
     if (D.lv[id] && locked[id]) {
       Object.entries(D.ind).forEach(([indId, d]) => {
-        if (d.lv === id) {
-          groupOffsets[indId] = {dx: pos[indId].x - pos[id].x,
-                                 dy: pos[indId].y - pos[id].y};
-        }
+        if (d.lv === id) groupOffsets[indId] = {dx:pos[indId].x-pos[id].x, dy:pos[indId].y-pos[id].y};
       });
     }
   }
@@ -876,17 +876,14 @@ details[open] summary::after { content: ' ▴'; }
     const p=svgPt(e);
     const nx=p.x-drag.ox, ny=p.y-drag.oy;
     pos[drag.id].x=nx; pos[drag.id].y=ny;
-    /* tether: move grouped indicators with the LV */
     Object.entries(groupOffsets).forEach(([indId, off]) => {
-      pos[indId].x = nx + off.dx;
-      pos[indId].y = ny + off.dy;
+      pos[indId].x = nx+off.dx; pos[indId].y = ny+off.dy;
     });
     render();
   });
   window.addEventListener('mouseup', () => {
     if (drag && !drag.moved) showInfo(drag.id);
-    drag=null;
-    groupOffsets={};
+    drag=null; groupOffsets={};
   });
 
   /* ── touch drag ───────────────────────────────────────────────────────── */
@@ -899,10 +896,7 @@ details[open] summary::after { content: ' ▴'; }
     groupOffsets = {};
     if (D.lv[id] && locked[id]) {
       Object.entries(D.ind).forEach(([indId, d]) => {
-        if (d.lv === id) {
-          groupOffsets[indId] = {dx: pos[indId].x - pos[id].x,
-                                 dy: pos[indId].y - pos[id].y};
-        }
+        if (d.lv === id) groupOffsets[indId] = {dx:pos[indId].x-pos[id].x, dy:pos[indId].y-pos[id].y};
       });
     }
   }
@@ -913,26 +907,28 @@ details[open] summary::after { content: ' ▴'; }
     const nx=p.x-drag.ox, ny=p.y-drag.oy;
     pos[drag.id].x=nx; pos[drag.id].y=ny;
     Object.entries(groupOffsets).forEach(([indId, off]) => {
-      pos[indId].x = nx + off.dx;
-      pos[indId].y = ny + off.dy;
+      pos[indId].x = nx+off.dx; pos[indId].y = ny+off.dy;
     });
     render();
   }, {passive:false});
   svg.addEventListener('touchend', () => { drag=null; groupOffsets={}; });
 
+  /* expose font-scale to outer scope so toolbar buttons can call diagFontSize() */
+  window._diagSetFsc = function(v) { _fsc = v; render(); };
+  window._diagGetFsc = function() { return _fsc; };
+
   render();
 })();
-</script>
+</script></div>
   <p class="legend">
     Drag any node to rearrange &nbsp;|&nbsp; Click a node to inspect its statistics &nbsp;|&nbsp;
-    🔒 badge on LV toggles group drag &nbsp;|&nbsp;
+    &#128274; badge on LV toggles group drag &nbsp;|&nbsp;
     Hover any arrow for value popup &nbsp;|&nbsp;
     Solid arrows: direct paths (green = sig. p&lt;0.05, red = ns) &nbsp;|&nbsp;
-    Dashed blue: indirect/mediation paths &nbsp;|&nbsp; Numbers on outer arrows: loadings &nbsp;|&nbsp;
-    Use ↔ button or drag ↘ corner to resize
+    Dashed arrows: indirect/mediation (blue = sig. p&lt;0.05, red = ns) &nbsp;|&nbsp; Numbers on outer arrows: loadings &nbsp;|&nbsp;
+    Use &#8596; button or drag &#8600; corner to resize
   </p>
 </div>
-<!-- Line tooltip — position:fixed so it floats above everything -->
 <div id="line-tip" style="display:none;position:fixed;pointer-events:none;
   background:white;border:1px solid #e2e8f0;border-radius:9px;
   padding:10px 14px;font-size:0.77rem;z-index:9999;
@@ -1046,7 +1042,7 @@ details[open] summary::after { content: ' ▴'; }
 
 <div class="card">
   <h2>Hypothesis Testing (Direct &amp; Indirect Effects)</h2>
-  <div class="ov"><table class="tbl"><thead><tr><th>Hyp</th><th>Path</th><th>Type</th><th>Estimate</th><th>t-stat</th><th>p-value</th><th>Sig</th><th>95% CI</th></tr></thead><tbody><tr><td class="ns">H1</td><td class="ns">X1 -> Y</td><td>direct</td><td>-0.0964</td><td>0.1378</td><td>0.890</td><td class="ns">ns</td><td>[-0.2844, 0.4598]</td></tr><tr><td class="ns">H2</td><td class="ns">X1 -> Z1</td><td>direct</td><td>0.1098</td><td>0.6184</td><td>0.536</td><td class="ns">ns</td><td>[-0.2336, 0.4701]</td></tr><tr><td class="ns">H3</td><td class="ns">X1 -> Z2</td><td>direct</td><td>0.2693</td><td>1.4257</td><td>0.154</td><td class="ns">ns</td><td>[-0.0624, 0.6907]</td></tr><tr><td class="sig">H4</td><td class="sig">X2 -> Y</td><td>direct</td><td>0.3954</td><td>4.8720</td><td><0.001</td><td class="sig">***</td><td>[0.4654, 1.1830]</td></tr><tr><td class="sig">H5</td><td class="sig">X2 -> Z2</td><td>direct</td><td>0.6108</td><td>3.2918</td><td>0.001</td><td class="sig">**</td><td>[0.1865, 0.9348]</td></tr><tr><td class="sig">H6</td><td class="sig">X2 -> Z1</td><td>direct</td><td>0.8506</td><td>5.0590</td><td><0.001</td><td class="sig">***</td><td>[0.5057, 1.1656]</td></tr><tr><td class="ns">H7</td><td class="ns">Z1 -> Y</td><td>direct</td><td>0.3559</td><td>1.7482</td><td>0.080</td><td class="ns">ns</td><td>[-0.0164, 0.7671]</td></tr><tr><td class="sig">H8</td><td class="sig">Z2 -> Y</td><td>direct</td><td>0.3093</td><td>2.9280</td><td>0.003</td><td class="sig">**</td><td>[0.1200, 0.5360]</td></tr><tr><td class="ns">H9</td><td class="ns">X1 -> Z1 -> Y</td><td>indirect</td><td>0.0391</td><td>0.5830</td><td>0.560</td><td class="ns">ns</td><td>—</td></tr><tr><td class="ns">H10</td><td class="ns">X1 -> Z2 -> Y</td><td>indirect</td><td>0.0833</td><td>1.2818</td><td>0.200</td><td class="ns">ns</td><td>—</td></tr><tr><td class="sig">H11</td><td class="sig">X2 -> Z2 -> Y</td><td>indirect</td><td>0.1889</td><td>2.1878</td><td>0.029</td><td class="sig">*</td><td>—</td></tr><tr><td class="ns">H12</td><td class="ns">X2 -> Z1 -> Y</td><td>indirect</td><td>0.3027</td><td>1.6523</td><td>0.099</td><td class="ns">ns</td><td>—</td></tr></tbody></table></div>
+  <div class="ov"><table class="tbl"><thead><tr><th>Hyp</th><th>Path</th><th>Type</th><th>Estimate</th><th>t-stat</th><th>p-value</th><th>Sig</th><th>95% CI</th></tr></thead><tbody><tr><td class="ns">H1</td><td class="ns">X1 -> Y</td><td>direct</td><td>-0.0964</td><td>0.1368</td><td>0.891</td><td class="ns">ns</td><td>[-0.2879, 0.4383]</td></tr><tr><td class="ns">H2</td><td class="ns">X1 -> Z1</td><td>direct</td><td>0.1098</td><td>0.6291</td><td>0.529</td><td class="ns">ns</td><td>[-0.2355, 0.4412]</td></tr><tr><td class="ns">H3</td><td class="ns">X1 -> Z2</td><td>direct</td><td>0.2693</td><td>1.4074</td><td>0.159</td><td class="ns">ns</td><td>[-0.0722, 0.6749]</td></tr><tr><td class="sig">H4</td><td class="sig">X2 -> Y</td><td>direct</td><td>0.3954</td><td>4.8186</td><td><0.001</td><td class="sig">***</td><td>[0.4936, 1.1904]</td></tr><tr><td class="sig">H5</td><td class="sig">X2 -> Z2</td><td>direct</td><td>0.6108</td><td>3.2370</td><td>0.001</td><td class="sig">**</td><td>[0.2149, 0.9496]</td></tr><tr><td class="sig">H6</td><td class="sig">X2 -> Z1</td><td>direct</td><td>0.8506</td><td>5.1331</td><td><0.001</td><td class="sig">***</td><td>[0.5431, 1.1782]</td></tr><tr><td class="ns">H7</td><td class="ns">Z1 -> Y</td><td>direct</td><td>0.3559</td><td>1.7564</td><td>0.079</td><td class="ns">ns</td><td>[-0.0010, 0.7768]</td></tr><tr><td class="sig">H8</td><td class="sig">Z2 -> Y</td><td>direct</td><td>0.3093</td><td>2.9371</td><td>0.003</td><td class="sig">**</td><td>[0.1122, 0.5305]</td></tr><tr><td class="ns">H9</td><td class="ns">X1 -> Z1 -> Y</td><td>indirect</td><td>0.0391</td><td>0.5922</td><td>0.554</td><td class="ns">ns</td><td>—</td></tr><tr><td class="ns">H10</td><td class="ns">X1 -> Z2 -> Y</td><td>indirect</td><td>0.0833</td><td>1.2692</td><td>0.204</td><td class="ns">ns</td><td>—</td></tr><tr><td class="sig">H11</td><td class="sig">X2 -> Z2 -> Y</td><td>indirect</td><td>0.1889</td><td>2.1751</td><td>0.030</td><td class="sig">*</td><td>—</td></tr><tr><td class="ns">H12</td><td class="ns">X2 -> Z1 -> Y</td><td>indirect</td><td>0.3027</td><td>1.6618</td><td>0.097</td><td class="ns">ns</td><td>—</td></tr></tbody></table></div>
 </div>
 
 <div class="grid2">
@@ -1532,173 +1528,173 @@ details[open] summary::after { content: ' ▴'; }
     <tr>
       <th>AvX11</th>
       <td>0.9812</td>
-      <td>0.9809</td>
-      <td>0.0069</td>
-      <td>0.9652</td>
-      <td>0.9920</td>
-      <td>141.4156</td>
+      <td>0.9807</td>
+      <td>0.0072</td>
+      <td>0.9642</td>
+      <td>0.9917</td>
+      <td>136.9302</td>
     </tr>
     <tr>
       <th>AvX12</th>
       <td>0.9725</td>
-      <td>0.9730</td>
-      <td>0.0082</td>
-      <td>0.9550</td>
-      <td>0.9863</td>
-      <td>118.4105</td>
+      <td>0.9729</td>
+      <td>0.0083</td>
+      <td>0.9539</td>
+      <td>0.9862</td>
+      <td>117.2766</td>
     </tr>
     <tr>
       <th>AvX13</th>
       <td>0.9586</td>
-      <td>0.9576</td>
-      <td>0.0171</td>
-      <td>0.9164</td>
-      <td>0.9837</td>
-      <td>56.1190</td>
+      <td>0.9571</td>
+      <td>0.0172</td>
+      <td>0.9176</td>
+      <td>0.9826</td>
+      <td>55.8907</td>
     </tr>
     <tr>
       <th>AvX21</th>
       <td>0.9704</td>
       <td>0.9690</td>
-      <td>0.0120</td>
-      <td>0.9408</td>
-      <td>0.9862</td>
-      <td>81.1890</td>
+      <td>0.0118</td>
+      <td>0.9416</td>
+      <td>0.9870</td>
+      <td>82.4357</td>
     </tr>
     <tr>
       <th>AvX22</th>
       <td>0.9721</td>
       <td>0.9713</td>
-      <td>0.0094</td>
-      <td>0.9493</td>
-      <td>0.9863</td>
-      <td>103.5506</td>
+      <td>0.0093</td>
+      <td>0.9485</td>
+      <td>0.9852</td>
+      <td>104.0197</td>
     </tr>
     <tr>
       <th>AvX23</th>
       <td>0.9363</td>
-      <td>0.9363</td>
-      <td>0.0212</td>
-      <td>0.8900</td>
-      <td>0.9737</td>
-      <td>44.2139</td>
+      <td>0.9362</td>
+      <td>0.0208</td>
+      <td>0.8917</td>
+      <td>0.9730</td>
+      <td>44.9957</td>
     </tr>
     <tr>
       <th>AvX24</th>
       <td>0.9674</td>
-      <td>0.9664</td>
-      <td>0.0134</td>
-      <td>0.9352</td>
-      <td>0.9863</td>
-      <td>72.4387</td>
+      <td>0.9665</td>
+      <td>0.0129</td>
+      <td>0.9338</td>
+      <td>0.9853</td>
+      <td>74.8185</td>
     </tr>
     <tr>
       <th>AvZ11</th>
       <td>0.9802</td>
-      <td>0.9799</td>
-      <td>0.0082</td>
-      <td>0.9593</td>
-      <td>0.9922</td>
-      <td>119.9434</td>
+      <td>0.9802</td>
+      <td>0.0083</td>
+      <td>0.9609</td>
+      <td>0.9926</td>
+      <td>118.5732</td>
     </tr>
     <tr>
       <th>AvZ12</th>
       <td>0.9622</td>
-      <td>0.9616</td>
-      <td>0.0155</td>
-      <td>0.9255</td>
-      <td>0.9849</td>
-      <td>61.9045</td>
+      <td>0.9618</td>
+      <td>0.0156</td>
+      <td>0.9259</td>
+      <td>0.9851</td>
+      <td>61.6352</td>
     </tr>
     <tr>
       <th>AvZ13</th>
       <td>0.9830</td>
-      <td>0.9823</td>
-      <td>0.0072</td>
-      <td>0.9652</td>
+      <td>0.9824</td>
+      <td>0.0070</td>
+      <td>0.9657</td>
       <td>0.9930</td>
-      <td>135.7805</td>
+      <td>139.8273</td>
     </tr>
     <tr>
       <th>AvZ14</th>
       <td>0.9846</td>
       <td>0.9840</td>
-      <td>0.0070</td>
-      <td>0.9674</td>
-      <td>0.9944</td>
-      <td>140.8458</td>
+      <td>0.0068</td>
+      <td>0.9676</td>
+      <td>0.9941</td>
+      <td>145.2465</td>
     </tr>
     <tr>
       <th>AvZ21</th>
       <td>0.9047</td>
-      <td>0.9039</td>
-      <td>0.0278</td>
-      <td>0.8411</td>
-      <td>0.9518</td>
-      <td>32.5518</td>
+      <td>0.9026</td>
+      <td>0.0298</td>
+      <td>0.8354</td>
+      <td>0.9504</td>
+      <td>30.3490</td>
     </tr>
     <tr>
       <th>AvZ22</th>
       <td>0.9080</td>
-      <td>0.9084</td>
-      <td>0.0338</td>
-      <td>0.8313</td>
-      <td>0.9640</td>
-      <td>26.8908</td>
+      <td>0.9075</td>
+      <td>0.0334</td>
+      <td>0.8326</td>
+      <td>0.9616</td>
+      <td>27.2090</td>
     </tr>
     <tr>
       <th>AvZ23</th>
       <td>0.9083</td>
-      <td>0.9101</td>
-      <td>0.0305</td>
-      <td>0.8433</td>
-      <td>0.9611</td>
-      <td>29.7431</td>
+      <td>0.9100</td>
+      <td>0.0304</td>
+      <td>0.8414</td>
+      <td>0.9592</td>
+      <td>29.9237</td>
     </tr>
     <tr>
       <th>AvY1</th>
       <td>0.9548</td>
-      <td>0.9536</td>
+      <td>0.9534</td>
       <td>0.0160</td>
-      <td>0.9162</td>
-      <td>0.9783</td>
-      <td>59.5042</td>
+      <td>0.9153</td>
+      <td>0.9788</td>
+      <td>59.7758</td>
     </tr>
     <tr>
       <th>AvY2</th>
       <td>0.9620</td>
-      <td>0.9615</td>
-      <td>0.0120</td>
-      <td>0.9354</td>
-      <td>0.9816</td>
-      <td>80.4786</td>
+      <td>0.9621</td>
+      <td>0.0117</td>
+      <td>0.9358</td>
+      <td>0.9821</td>
+      <td>82.3049</td>
     </tr>
     <tr>
       <th>AvY3</th>
       <td>0.9211</td>
-      <td>0.9192</td>
-      <td>0.0429</td>
-      <td>0.8118</td>
-      <td>0.9751</td>
-      <td>21.4896</td>
+      <td>0.9196</td>
+      <td>0.0416</td>
+      <td>0.8211</td>
+      <td>0.9749</td>
+      <td>22.1474</td>
     </tr>
     <tr>
       <th>AvY4</th>
       <td>0.9039</td>
-      <td>0.9149</td>
-      <td>0.0310</td>
-      <td>0.8650</td>
-      <td>0.9796</td>
-      <td>29.1279</td>
+      <td>0.9143</td>
+      <td>0.0306</td>
+      <td>0.8651</td>
+      <td>0.9778</td>
+      <td>29.5101</td>
     </tr>
     <tr>
       <th>AvY5</th>
       <td>0.9691</td>
-      <td>0.9690</td>
-      <td>0.0096</td>
-      <td>0.9465</td>
-      <td>0.9846</td>
-      <td>100.6268</td>
+      <td>0.9689</td>
+      <td>0.0098</td>
+      <td>0.9472</td>
+      <td>0.9847</td>
+      <td>99.3510</td>
     </tr>
   </tbody>
 </table></div>
@@ -1723,74 +1719,74 @@ details[open] summary::after { content: ' ▴'; }
     <tr>
       <th>X2 -&gt; Z2</th>
       <td>0.6108</td>
-      <td>0.5926</td>
-      <td>0.1855</td>
-      <td>0.1865</td>
-      <td>0.9348</td>
-      <td>3.2918</td>
+      <td>0.6022</td>
+      <td>0.1887</td>
+      <td>0.2149</td>
+      <td>0.9496</td>
+      <td>3.2370</td>
     </tr>
     <tr>
       <th>X2 -&gt; Z1</th>
       <td>0.8506</td>
-      <td>0.8389</td>
-      <td>0.1681</td>
-      <td>0.5057</td>
-      <td>1.1656</td>
-      <td>5.0590</td>
+      <td>0.8518</td>
+      <td>0.1657</td>
+      <td>0.5431</td>
+      <td>1.1782</td>
+      <td>5.1331</td>
     </tr>
     <tr>
       <th>X2 -&gt; Y</th>
       <td>0.8871</td>
-      <td>0.8627</td>
-      <td>0.1821</td>
-      <td>0.4654</td>
-      <td>1.1830</td>
-      <td>4.8720</td>
+      <td>0.8719</td>
+      <td>0.1841</td>
+      <td>0.4936</td>
+      <td>1.1904</td>
+      <td>4.8186</td>
     </tr>
     <tr>
       <th>X1 -&gt; Z2</th>
       <td>0.2693</td>
-      <td>0.2843</td>
-      <td>0.1889</td>
-      <td>-0.0624</td>
-      <td>0.6907</td>
-      <td>1.4257</td>
+      <td>0.2747</td>
+      <td>0.1913</td>
+      <td>-0.0722</td>
+      <td>0.6749</td>
+      <td>1.4074</td>
     </tr>
     <tr>
       <th>X1 -&gt; Z1</th>
       <td>0.1098</td>
-      <td>0.1207</td>
-      <td>0.1776</td>
-      <td>-0.2336</td>
-      <td>0.4701</td>
-      <td>0.6184</td>
+      <td>0.1076</td>
+      <td>0.1746</td>
+      <td>-0.2355</td>
+      <td>0.4412</td>
+      <td>0.6291</td>
     </tr>
     <tr>
       <th>X1 -&gt; Y</th>
       <td>0.0260</td>
-      <td>0.0484</td>
-      <td>0.1884</td>
-      <td>-0.2844</td>
-      <td>0.4598</td>
-      <td>0.1378</td>
+      <td>0.0389</td>
+      <td>0.1897</td>
+      <td>-0.2879</td>
+      <td>0.4383</td>
+      <td>0.1368</td>
     </tr>
     <tr>
       <th>Z2 -&gt; Y</th>
       <td>0.3093</td>
-      <td>0.3084</td>
-      <td>0.1056</td>
-      <td>0.1200</td>
-      <td>0.5360</td>
-      <td>2.9280</td>
+      <td>0.3055</td>
+      <td>0.1053</td>
+      <td>0.1122</td>
+      <td>0.5305</td>
+      <td>2.9371</td>
     </tr>
     <tr>
       <th>Z1 -&gt; Y</th>
       <td>0.3559</td>
-      <td>0.3600</td>
-      <td>0.2036</td>
-      <td>-0.0164</td>
-      <td>0.7671</td>
-      <td>1.7482</td>
+      <td>0.3686</td>
+      <td>0.2026</td>
+      <td>-0.0010</td>
+      <td>0.7768</td>
+      <td>1.7564</td>
     </tr>
   </tbody>
 </table></div>
@@ -2285,17 +2281,13 @@ details[open] summary::after { content: ' ▴'; }
 </p>
 
 <script>
-/* ════════════════════════════════════════════════════════════════════
-   DIAGRAM RESIZE CONTROLS
-   ════════════════════════════════════════════════════════════════════ */
+/* ════ DIAGRAM RESIZE CONTROLS ════ */
 var _fitVP = false;
-
 function toggleFitViewport() {
   _fitVP = !_fitVP;
   var wrap = document.getElementById('diagram-wrap');
   var btn  = document.getElementById('btn-fit-vp');
   if (_fitVP) {
-    /* body has 20px padding each side, card has 20px padding each side → 80px total */
     wrap.style.width = (window.innerWidth - 80) + 'px';
     btn.classList.add('active');
     btn.textContent = '↔ Fitted to Viewport';
@@ -2305,7 +2297,6 @@ function toggleFitViewport() {
     btn.textContent = '↔ Fit Viewport Width';
   }
 }
-
 function resetDiagramSize() {
   _fitVP = false;
   var wrap = document.getElementById('diagram-wrap');
@@ -2315,8 +2306,98 @@ function resetDiagramSize() {
   btn.classList.remove('active');
   btn.textContent = '↔ Fit Viewport Width';
 }
+/* ── diagram font size controls ── */
+function diagFontSize(delta) {
+  if (typeof window._diagSetFsc !== 'function') return;
+  var next = Math.max(0.4, Math.min(3.0, (window._diagGetFsc()||1.0) + delta * 0.12));
+  window._diagSetFsc(next);
+  document.getElementById('btn-font-size-lbl').textContent = Math.round(next*100) + '%';
+}
 
-/* Keep "Fit Viewport Width" state in sync when user manually resizes */
+/* ── diagram download (PNG or SVG, colour or B&W) ── */
+function _svgToBW(s) {
+  /* Map each UI colour to a greyscale equivalent.
+     Significant paths → near-black; NS paths → medium grey;
+     fills/backgrounds → white; borders/indicators → light grey. */
+  return s
+    .replace(/#059669/gi, '#000000')   /* green  sig direct  → black        */
+    .replace(/#2563eb/gi, '#111111')   /* blue   sig indirect → near-black   */
+    .replace(/#3b82f6/gi, '#444444')   /* blue   LV stroke    → dark grey    */
+    .replace(/#1e40af/gi, '#000000')   /* dk-blue LV label    → black        */
+    .replace(/#1d4ed8/gi, '#000000')   /* selected blue       → black        */
+    .replace(/#ef4444/gi, '#888888')   /* red    ns paths     → mid grey     */
+    .replace(/#dc2626/gi, '#888888')   /* red    ns variant   → mid grey     */
+    .replace(/#374151/gi, '#000000')   /* indicator text      → black        */
+    .replace(/#64748b/gi, '#555555')   /* loading labels      → dk grey      */
+    .replace(/#94a3b8/gi, '#aaaaaa')   /* indicator arrows    → lt grey      */
+    .replace(/#6b7280/gi, '#888888')   /* lock badge text     → mid grey     */
+    .replace(/#eff6ff/gi, '#ffffff')   /* LV circle fill      → white        */
+    .replace(/#dbeafe/gi, '#eeeeee')   /* locked badge fill   → near-white   */
+    .replace(/#f1f5f9/gi, '#f5f5f5')   /* free badge fill     → near-white   */
+    .replace(/#f8fafc/gi, '#ffffff')   /* SVG background      → white        */
+    .replace(/#e2e8f0/gi, '#cccccc')   /* light borders       → lt grey      */
+    .replace(/#cbd5e1/gi, '#cccccc')   /* badge border        → lt grey      */
+    .replace(/fill="#555"/gi,   'fill="#000000"')
+    .replace(/stroke="#555"/gi, 'stroke="#000000"');
+}
+
+function downloadDiagram(fmt, bw) {
+  var svgEl  = document.getElementById('diagram-svg');
+  var vb     = svgEl.viewBox.baseVal;            /* 0 0 W H                 */
+  var clone  = svgEl.cloneNode(true);            /* deep clone, current state */
+
+  /* inject a white background rect so PNG has a solid background */
+  var bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('x','0'); bg.setAttribute('y','0');
+  bg.setAttribute('width', vb.width); bg.setAttribute('height', vb.height);
+  bg.setAttribute('fill','white');
+  clone.insertBefore(bg, clone.firstChild);
+
+  /* set explicit pixel dimensions (needed for canvas rasterisation) */
+  clone.setAttribute('width',  vb.width);
+  clone.setAttribute('height', vb.height);
+
+  var svgStr = new XMLSerializer().serializeToString(clone);
+  if (bw) svgStr = _svgToBW(svgStr);
+
+  if (fmt === 'svg') {
+    /* ── SVG vector download ── */
+    svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + svgStr;
+    var blob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
+    var a = document.createElement('a');
+    a.download = bw ? 'diagram-bw.svg' : 'diagram-color.svg';
+    a.href = URL.createObjectURL(blob);
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+    return;
+  }
+
+  /* ── PNG raster download (2× for high-DPI / print quality) ── */
+  var sc   = 2;
+  var blob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
+  var url  = URL.createObjectURL(blob);
+  var img  = new Image();
+  img.onload = function() {
+    var cv  = document.createElement('canvas');
+    cv.width  = vb.width  * sc;
+    cv.height = vb.height * sc;
+    var ctx = cv.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    URL.revokeObjectURL(url);
+    var a = document.createElement('a');
+    a.download = bw ? 'diagram-bw.png' : 'diagram-color.png';
+    a.href = cv.toDataURL('image/png');
+    a.click();
+  };
+  img.onerror = function() {
+    URL.revokeObjectURL(url);
+    alert('PNG export failed in this browser.\nTry the SVG buttons instead — SVG opens in any browser and can be saved from there.');
+  };
+  img.src = url;
+}
+
 document.getElementById('diagram-wrap').addEventListener('mouseup', function() {
   _fitVP = false;
   var btn = document.getElementById('btn-fit-vp');
@@ -2324,12 +2405,7 @@ document.getElementById('diagram-wrap').addEventListener('mouseup', function() {
   btn.textContent = '↔ Fit Viewport Width';
 });
 
-
-/* ════════════════════════════════════════════════════════════════════
-   TABLE UTILITY FUNCTIONS
-   ════════════════════════════════════════════════════════════════════ */
-
-/** Extract table as tab-separated text (pastes cleanly into Excel / Word). */
+/* ════ TABLE UTILITIES ════ */
 function _tableToTSV(tbl) {
   var rows = tbl.querySelectorAll('tr');
   var lines = [];
@@ -2341,8 +2417,6 @@ function _tableToTSV(tbl) {
   });
   return lines.join('\n');
 }
-
-/** Extract table as CSV text. */
 function _tableToCSV(tbl) {
   var rows = tbl.querySelectorAll('tr');
   var lines = [];
@@ -2357,86 +2431,58 @@ function _tableToCSV(tbl) {
   });
   return lines.join('\n');
 }
-
-/** Copy table as TSV to clipboard; flash button green on success. */
 function copyTableTSV(btn, tbl) {
   var text = _tableToTSV(tbl);
-  navigator.clipboard.writeText(text).then(function() {
+  var doFlash = function() {
     var orig = btn.textContent;
     btn.textContent = '✓ Copied!';
     btn.classList.add('ok');
-    setTimeout(function() {
-      btn.textContent = orig;
-      btn.classList.remove('ok');
-    }, 1600);
-  }).catch(function() {
-    /* Fallback for older browsers */
+    setTimeout(function() { btn.textContent = orig; btn.classList.remove('ok'); }, 1600);
+  };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(doFlash).catch(function() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); doFlash();
+    });
+  } else {
     var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity  = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    var orig = btn.textContent;
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('ok');
-    setTimeout(function() {
-      btn.textContent = orig;
-      btn.classList.remove('ok');
-    }, 1600);
-  });
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); doFlash();
+  }
 }
-
-/** Download table as a CSV file. */
 function downloadTableCSV(tbl, filename) {
-  var csv = '﻿' + _tableToCSV(tbl); /* BOM for Excel UTF-8 */
+  var csv = '\uFEFF' + _tableToCSV(tbl);
   var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
-  a.href     = url;
-  a.download = filename + '.csv';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function() {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 200);
+  a.href = url; a.download = filename + '.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
 }
-
-/** Derive a safe filename from heading text. */
 function _safeSlug(str) {
-  return str.replace(/[^a-z0-9]+/gi, '_').replace(/^_|_$/g, '').toLowerCase() || 'table';
+  return str.replace(/[^a-z0-9]+/gi, '_').replace(/^_|_$/g,'').toLowerCase() || 'table';
 }
 
-
-/* ════════════════════════════════════════════════════════════════════
-   AUTO-INJECT COPY + DOWNLOAD BUTTONS INTO EVERY TABLE
-   ════════════════════════════════════════════════════════════════════ */
+/* ════ AUTO-INJECT COPY + DOWNLOAD BUTTONS ════ */
 document.addEventListener('DOMContentLoaded', function() {
-  /* Track table index for unique filenames when headings clash */
   var idx = 0;
-
   document.querySelectorAll('table.tbl, table.dataframe').forEach(function(tbl) {
     idx++;
-
-    /* ── Find a label for the table (nearest preceding h2) ── */
     var label = '';
-    /* Walk up through parents looking for h2 siblings or contained h2 */
     var node = tbl;
-    while (node && node !== document.body) {
-      /* check siblings before this node */
+    outer: while (node && node !== document.body) {
       var sib = node.previousElementSibling;
       while (sib) {
-        if (sib.tagName === 'H2' || sib.tagName === 'SUMMARY') {
-          var h = sib.tagName === 'SUMMARY' ? sib.querySelector('h2') : sib;
-          if (h) { label = h.innerText.trim(); break; }
+        if (sib.tagName === 'H2') { label = sib.innerText.trim(); break outer; }
+        if (sib.tagName === 'SUMMARY') {
+          var h = sib.querySelector('h2');
+          if (h) { label = h.innerText.trim(); break outer; }
         }
         sib = sib.previousElementSibling;
       }
-      if (label) break;
-      /* check if parent card has h2 */
       if (node.classList && node.classList.contains('card')) {
         var h2 = node.querySelector(':scope > h2');
         if (h2) { label = h2.innerText.trim(); break; }
@@ -2445,26 +2491,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     var slug = (label ? _safeSlug(label) : 'table') + '_' + idx;
 
-    /* ── Build toolbar ── */
     var tb = document.createElement('div');
     tb.className = 'tbl-toolbar';
 
     var btnCopy = document.createElement('button');
     btnCopy.className = 'btn-tool';
-    btnCopy.title     = 'Copy as tab-separated text — paste directly into Excel or Word';
+    btnCopy.title = 'Copy as tab-separated — paste into Excel or Word';
     btnCopy.innerHTML = '&#128203; Copy table';
     btnCopy.addEventListener('click', function() { copyTableTSV(btnCopy, tbl); });
 
     var btnDl = document.createElement('button');
     btnDl.className = 'btn-tool dl';
-    btnDl.title     = 'Download as CSV file';
+    btnDl.title = 'Download as CSV file';
     btnDl.innerHTML = '&#8681; Download CSV';
     btnDl.addEventListener('click', function() { downloadTableCSV(tbl, slug); });
 
     tb.appendChild(btnCopy);
     tb.appendChild(btnDl);
 
-    /* ── Insert toolbar before the scrollable wrapper (or the table itself) ── */
     var ovDiv = tbl.closest('.ov');
     var insertTarget = ovDiv ? ovDiv : tbl;
     insertTarget.parentElement.insertBefore(tb, insertTarget);
